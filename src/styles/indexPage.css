@@ -1,0 +1,741 @@
+/* styles/indexPage.css */
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f3f5f9;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 40px;
+	min-height: 100vh;
+	width: 100%;
+	position: relative;
+	padding-bottom: 80px; /* Высота футера */
+  }
+  .hide {
+	display: none;
+  }
+.header {
+    margin-top: 0px; /*  нужный отступ в пикселях */
+    width: 100%;
+    padding: 10px;
+    position: relative;
+}
+  .header::after {
+	content: '';
+	position: absolute;
+	bottom: -14%; /* Размещаем тень в верхней части шапки */
+	left: 10%; /* Отступ с левой стороны */
+	right: 10%; /* Отступ с правой стороны */
+	height: 2px; /* Высота тени */
+	background-color: rgba(0, 0, 0, 0.1); /* Цвет тени */
+  }
+  
+.header-content {
+    /* Стили для содержимого шапки */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1060px; /* Максимальная ширина шапки */
+    margin: 0 auto; /* Центрируем шапку по горизонтали */
+}
+
+.logo {
+    width: 50px;
+    height: 48px;
+	margin-right: 2px; /*  отступ справа от логотипа */
+}
+
+.header-content h3{
+	color:  #0a0101;
+	font: normal 30px 'Open Sans', cursive;
+	margin: 0;
+}
+
+.header-content h3 span{
+	color:  #3167D9;
+}
+
+
+
+.main {
+	flex-grow: 1;
+  	padding: 20px; /* Опционально - добавьте отступы */
+	  position: relative;
+	  margin-top: 5px; /* Задаем отступ сверху, чтобы контент не перекрывал тень */
+
+	}
+
+.tabs {
+    /* Стили для вкладок (кнопок) */
+    display: flex;
+    background-color: #f3f5f9;
+}
+
+.tab {
+    margin-left: 25px;
+	flex: 3;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+	white-space: nowrap; 
+}
+.tab.active {
+	color: gray; /*  цвет текста активной вкладки на серый */
+	border-top: 3px solid gray; /*  серпя полоса сверху для активной вкладки */
+  }
+.tab:hover {
+    color: #9a958c;
+    border-top: 3px solid #9a958c;
+}
+
+  .tab:hover {
+	color: #9a958c;
+	border-top: 3px solid #9a958c;
+  }
+  
+.login-button {
+    background-color: #3167d9;
+    color: #fff;
+    font-size: 17px;
+    border: none; /* Убираем границу */
+    border-radius: 15px; /* Закругляем углы */
+    padding: 10px 20px;
+    margin-left: 70px;
+	box-shadow: 0px 0px 22px 0px #ffffff;
+}
+
+.login-button:hover {
+    box-shadow: 0 0 15px 0px #3167d9;
+}
+a.login-button {
+	text-decoration: none; /* Убирает подчеркивание ссылки */
+	color: white; /* Устанавливает цвет текста */
+	font-size: 17px;
+    border: none; /* Убираем границу */
+    border-radius: 15px; /* Закругляем углы */
+    padding: 10px 20px;
+    margin-left: 70px;
+	box-shadow: 0px 0px 22px 0px #ffffff;
+  }
+/* -----------------------ПОДВАЛ------------------ */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,500,300,700);
+
+* {
+  font-family: Open Sans;
+}
+
+.footer-distributed{
+	background: #ffffff;
+	box-shadow: 0 5px 7px 5px rgba(0, 0, 0, 0.12);
+	box-sizing: border-box;
+	width: 100%;
+	height: 235px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	text-align: left;
+	font: bold 16px sans-serif;
+	padding: 35px 50px 0px 70px;
+}
+
+.footer-distributed .footer-left,
+.footer-distributed .footer-center,
+.footer-distributed .footer-right{
+	display: inline-block;
+	vertical-align: top;
+}
+
+/* Footer left */
+
+.footer-distributed .footer-left{
+	width: 40%;
+}
+
+/* The company logo */
+
+.footer-distributed h3{
+	color:  #0a0101;
+	font: normal 36px 'Open Sans', cursive;
+	margin: 0;
+}
+
+.footer-distributed h3 span{
+	color:  #3167D9;
+}
+
+/* Footer links */
+.footer-distributed .footer-links{
+	color:  #606063;
+	margin: 20px 0 12px;
+	padding: 0;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Добавляем тень */
+}
+
+/*  подсветку при наведении */
+.footer-distributed .footer-links a:hover {
+  color: #3167D9;
+  text-shadow: none; /* Убираем тень при наведении */
+}
+
+.footer-distributed .footer-links a{
+	display:inline-block;
+	line-height: 1.8;
+    font-weight:200;
+	text-decoration: none;
+	color:  inherit;
+}
+/* Текст */
+.footer-distributed .footer-company-name{
+	color:  #222;
+	font-size: 14px;
+	font-weight: normal;
+	margin: 0;
+}
+
+/* Footer Center */
+
+.footer-distributed .footer-center{
+	width: 35%;
+}
+
+.footer-distributed .footer-center i{
+	background-color:  #3167d9;
+	color: #ffffff;
+	font-size: 20px;
+	width: 37px;
+	height: 37px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 31px;
+	margin: 15px 15px ;
+	vertical-align: middle;
+}
+
+.footer-distributed .footer-center i.fa-envelope{
+	font-size: 17px;
+	line-height: 38px;
+}
+
+/* Адрес */
+.footer-distributed .footer-center p{
+	display: inline-block;
+	color: #3167D9;
+  	font-weight:400;
+	vertical-align: middle;
+	margin:0;
+}
+
+.footer-distributed .footer-center p span{
+	display:block;
+	font-weight: normal;
+	font-size:14px;
+	line-height:2;
+}
+
+.footer-distributed .footer-center p a{
+	color:  #1b1919;
+	text-decoration: none;;
+}
+
+.footer-distributed .footer-links a:before {
+  content: "|";
+  font-weight:300;
+  font-size: 20px;
+  left: 0;
+  color: #b0b0b2;
+  display: inline-block;
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+.footer-distributed .footer-links .link-1:before {
+  content: none;
+}
+
+/* Footer Right */
+.footer-distributed .footer-right{
+	width: 20%;
+}
+
+.footer-distributed .footer-company-about{
+	line-height: 20px;
+	color:  #92999f;
+	font-size: 13px;
+	font-weight: normal;
+	margin: 0;
+}
+
+.footer-distributed .footer-company-about span{
+	display: block;
+	color:  #3167D9;
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.footer-distributed .footer-icons{
+	margin-top: 25px;
+}
+
+.footer-distributed .footer-icons a{
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+	background-color:  #3167d9;
+	border-radius: 2px;
+
+	font-size: 15px;
+	color: #ffffff;
+	text-align: center;
+	line-height: 27px;
+
+	margin-right: 3px;
+	margin-bottom: 12px;
+}
+/* ------------------ПЕРВАЯ СТРАНИЦА_____________ */
+.container {
+	display: flex;
+	align-items: center;
+	position: relative;
+  }
+  
+  .text {
+	font-size: 46px;
+	font-weight: bold;
+	color: #3167D9;
+	margin-left: 220px; /* Отступ от левого края */
+	margin-right: 880px; /* Отступ от правого края */
+	margin-top: 30px;
+  }
+  
+/* Стиль для второго текста */
+.second-text {
+	margin-top: 50px;
+	font-size: 15px;
+	font-weight: normal;
+	color: rgb(95, 94, 94);
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+  
+  .background-image {
+	position: absolute;
+	width: 495px; 
+	height: 290px;
+	margin-top: 228px;
+	margin-left: 770px;
+  }
+  
+  .overlay-image {
+	width: 560px; /* доктор */
+	height: 430px;
+	position: absolute;
+	margin-top: 40px;
+	margin-left: 730px; /*  отступ между текстом и второй картинкой */
+  }
+  .button {
+	background-color: #f3f5f9;
+	color: #3167D9;
+	padding: 10px 20px;
+	border: 2px solid #3167D9;
+	border-radius: 15px;
+	margin: 10px;
+	cursor: pointer;
+	font-size: 18px;
+	font-weight: bold;
+	transition: box-shadow 0.3s ease;
+  }
+  
+  /* При наведении на кнопки */
+  .button:hover {
+	box-shadow: 0 0 9px #70a9dd;
+  }
+  .buttons {
+	display: flex; /*  кнопки в одну строку */
+	flex-direction: column; /*  кнопки вертикально друг под другом */
+  }
+  
+  .buttons button {
+	margin: 10px 0; /*  вертикальный отступ между кнопками */
+  }
+  /* ----------------------АВТОРИЗАЦИЯ----------------- */
+  form .txt_field{
+	position: relative;
+	border-bottom: 2px solid #adadad;
+	margin: 30px 0;
+  }
+  
+  .txt_field input{
+	width: 100%;
+	padding: 0 5px;
+	height: 40px;
+	font-size: 16px;
+	border: none;
+	background: none;
+	outline: none;
+  }
+  
+  .txt_field label{
+	position: absolute;
+	top: 50%;
+	left: 5px;
+	color: #3167D9;
+	transform: translateY(-50%);
+	font-size: 16px;
+	pointer-events: none;
+  }
+  
+  .txt_field span::before{
+	content: '';
+	position: absolute;
+	top: 40px;
+	left: 0;
+	width: 0px;
+	height: 2px;
+	background: #2691d9;
+	transition: .5s;
+  }
+  
+  .txt_field input:focus ~ label,
+  .txt_field input:valid ~ label{
+	top: -5px;
+	color: #2691d9;
+  }
+  
+  .txt_field input:focus ~ span::before,
+  .txt_field input:Valid ~ span::before{
+	width: 100%;
+  }
+  
+  .pass{
+	margin: -5px 0 20px 5px;
+	color: #a6a6a6;
+	cursor: pointer;
+  }
+  
+  .pass:hover{
+	text-decoration: underline;
+  }
+  
+  input[type="Submit"]{
+	background-color: #f3f5f9;
+	width: 100%;
+	height: 50px;
+	border: 1px solid;
+	border-radius: 25px;
+	border-color: #3167D9;
+	font-size: 18px;
+	color: #3167d9;
+	font-weight: 700;
+	cursor: pointer;
+  
+  }
+  
+  input[type="Submit"]:hover{
+	background: #3167D9;
+	color: white;
+	transition: .5s;
+  }
+  
+  .signup_link{
+	margin: 30px 0;
+	text-align: center;
+	font-size: 16px;
+	color: #666666;
+  }
+  
+  .signup_link a{
+	color: #3167D9;
+	text-decoration: none;
+  }
+  
+  .signup_link a:hover{
+	text-decoration: underline;
+  }
+  
+  .HomeAbout{
+	width: 100vw;
+	height: 25vh;
+  }
+  /* ----------------------АВТОРИЗАЦИЯ----------------- */
+
+  .header1 {
+    background-size: cover;
+    text-align: center;
+    padding: 20px;
+}
+
+.header1 h1 {
+    margin: 0;
+}
+
+.category {
+    color: black;
+	font-weight: bold;
+	font-size: 30px;
+	text-transform: uppercase; /* Преобразует текст в большие буквы */
+    text-decoration: underline #3167D9;
+    margin-bottom: 5px;
+}
+
+input.special-input {
+    width: 1040px;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input.special-input:hover {
+    border-color: #3167D9;
+    border-radius: 6px;
+    box-shadow: 0 0 15px #3167D9;
+}
+
+.filter {
+    text-align: right;
+    margin: 10px;
+}
+
+.filter label, select {
+    margin-right: 10px;
+}
+
+.services {
+    padding: 20px;
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.service {
+    border: 1px solid #ccc;
+    padding: 10px;
+	display: grid;
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.name {
+    font-weight: bold;
+	font-size: 18px;
+	text-decoration: none;
+}
+
+.price {
+	font-weight: lighter;
+	font-size: 20px;
+	text-transform: capitalize;
+    color: #3167D9;
+}
+  
+.catalog {
+	font-size: 30px;
+	font-weight: bold;
+	color: #3167D9;
+	margin-top: 15px;
+  }
+   /* -------------------ЗАПИСЬ НА ПРИЕМ--------------
+  /* Стили для изменения размеров и расположения элементов */
+/* Стили для изменения размеров и расположения элементов */
+.left-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 20px; /* Добавим отступ справа между левой и правой секциями */
+}
+
+.right-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.right-image {
+	margin-left: 10px;
+    max-width: 1000px;
+    max-height: 600px;
+}
+
+/* Увеличение размеров шрифтов и кнопок */
+body {
+    font-size: 20px;
+}
+
+.input-section label,
+.button-section button {
+    font-size: 20px;
+	margin-top: 30px;
+	margin-left: 160px;
+}
+
+/* Увеличение размеров кнопок в таблице */
+.appointment-table button {
+    padding: 20px;
+}
+
+/* Стили для таблицы */
+.appointment-table {
+    width: 80%;
+	margin-top: 40px;
+	margin-bottom: 40px;
+
+    margin: 0 auto;
+}
+
+.appointment-table th, .appointment-table td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.appointment-table th {
+    background-color: #eee;
+}
+
+.appointment-table td button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+/* Стили для первой строки (заголовков) в таблице */
+.appointment-table th.first-row {
+    background-color: #9e9b9b; /* Темно-серый цвет */
+    color: #ffffff; 
+}
+
+.text2 {
+    text-align: left;
+	font-size: 46px;
+	font-weight: bold;
+	width: 700px; /*   фиксирован ширина */
+
+	color: #3167D9;
+	margin-top: -100px;
+    margin-bottom: 50px; /*  небольшой отступ снизу */
+}
+.input-section {
+	color: #3167D9;
+	font-weight: bold;
+}
+/*----------------------- КАРТОЧКИ ПАЦИЕНТЫ----------------*/
+.cards-container {
+	display: flex;
+	margin-top: 20px;
+	flex-wrap: wrap;
+	justify-content: space-around;
+  }
+  
+  .card {
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 16px;
+	width: 300px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .patient-info h2 {
+	font-size: 18px;
+	margin-bottom: 8px;
+  }
+  
+  .patient-info p {
+	margin: 4px 0;
+  }
+  
+  .details-button {
+	background-color: #3167D9;
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
+	border-radius: 4px;
+	cursor: pointer;
+  }
+  
+  .details-button:hover {
+	background-color: #ddd;
+  }
+  .service-container {
+	width: 800px;
+	margin-top: 10px;
+  }
+  /*-----------------------ПЛАТЕЖ----------------*/
+
+  form {
+	display: flex;
+	margin-left: 120px;
+	flex-direction: column;
+  }
+  
+  label {
+	margin-left: 20px;
+	color: #3167D9;
+	font-size: 18px;
+	margin-bottom: 8px;
+  }
+  
+  select,
+  input[type="text"],
+  input[type="datetime-local"] {
+	padding: 8px;
+	font-size: 16px;
+	border: 1px solid #3167D9;
+	border-radius: 4px;
+	margin-bottom: 12px;
+  }
+
+  payment-list {
+	display: flex;
+	margin-left: 120px;
+  }
+  select-with-search {
+	padding: 8px;
+	font-size: 16px;
+	border: 1px solid #3167D9;
+	border-radius: 4px;
+	margin-bottom: 12px;
+  }
+  /* Скрыть элемент select */
+#serviceSelect1 {
+  display: none;
+}
+
+/* Отобразить временный элемент, который определит ширину select */
+#serviceSelect1:valid + .width-check::after {
+  content: attr(data-value); /* Значение, которое будет использоваться для определения ширины */
+  visibility: hidden; /* Скрыть текст элемента */
+  white-space: nowrap; /* Запретить перенос текста */
+}
+
+/* Определить ширину select на основе текста во временном элементе */
+#serviceSelect1 + .width-check::after {
+  display: block;
+  position: absolute;
+  white-space: nowrap;
+  visibility: hidden;
+}
+
+/* Установить ширину select равной ширине временного элемента */
+#serviceSelect1 {
+  width: calc(100% - 1em); /* 1em - приблизительная ширина стрелки */
+
+}
+    .popup-message {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }

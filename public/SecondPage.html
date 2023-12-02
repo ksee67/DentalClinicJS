@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../public/images/logo.png" />
+    <link rel="stylesheet" href="../src/styles/indexPage.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<title>Dental Clinic</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+			<img src="../public/images/logo.png" alt="Логотип" class="logo">
+			<h3 class="clinic-name">Dental<span>clinic</span></h3>
+			<div class="tabs">
+                <div class="tab"><a href="../public/index.html" style="text-decoration: none; color: black;">Главная</a></div>
+                <div class="tab active">Каталог услуг</div>
+                <div class="tab"><a href="../public/AppointmentPage.html" style="text-decoration: none; color: black;">Запись на прием</a></div>
+                <div class="tab"><a href="../public/AllPatients.html" style="text-decoration: none; color: black;">Пациенты</a></div>
+                <div class="tab"><a href="../public/Payment.html" style="text-decoration: none; color: black;">Платёж</a></div>
+
+			</div>
+            <button class="login-button">Войти</button>
+        </div>
+    </header>
+    <main class="main" >
+		<p class="catalog">ЦЕНЫ НА ЛЕЧЕНИЕ ЗУБОВ В “Dental Clinic”</p>
+		<div class="header1">
+			<input type="text" class="special-input" placeholder="Поиск">
+			<div class="filter">
+				<label for="rating">По категории:</label>
+				<select id="rating">
+					<option value="all">Все категории</option>
+					<option value="1">Терапия</option>
+					<option value="2">Гигиена и профилактика</option>
+					<option value="3">Хирургия</option>
+				  </select>
+				<label for="price">По цене:</label>
+				<select id="price">
+					<option value="asc">По возрастанию</option>
+					<option value="desc">По убыванию</option>
+				</select>
+			</div>
+		</div>
+		</div>
+		<div class="category">Терапия</div>
+		<div class="services" id="therapy">
+		</div>  
+		<div class="category">ГИГИЕНА И ПРОФИЛАКТИКА</div>
+		  <div class="services" id="hygiene">
+		  </div>
+		  <div class="category">Хирургия</div>
+		  <div class="services" id="surgery">
+		  </div>
+		<p>njkn</p>
+		<p>njkn</p>
+		<p>njkn</p>
+
+    </main>
+	
+	<footer class="footer-distributed">
+			<div class="footer-left">
+				<h3>Dental<span>clinic</span></h3>
+				<p class="footer-links">
+					<a href="../public/index.html" class="link-1">Главная</a>			
+					<a href="../SecondPage/index.html">Каталог услуг</a>	
+					<a href="#">Запись на приём</a>			
+					<a href="#">Пациенты</a>				
+					<a href="#">Платёж</a>			
+				</p>
+				<p class="footer-company-name">Dental Clinic © 2023 - Все права защищены</p>
+			</div>
+			<div class="footer-center">
+				<div>
+					<i class="fa fa-map-marker"></i>
+					<p><span>ул. Калинина, д.15, к.1</span> м. Авиамоторная, Москва</p>
+				</div>
+				<div>
+					<i class="fa fa-phone"></i>
+					<p>+7(927)232-23-44</p>
+				</div>
+				<div>
+					<i class="fa fa-envelope"></i>
+					<p><a href="mailto:support@company.com">dental@mail.com</a></p>
+				</div>
+			</div>
+			<div class="footer-right">
+				<p class="footer-company-about">
+					<span>О нас</span>
+					Наши стоматологи предоставляют высококачественные услуги для создания здоровой и красивой улыбки с индивидуальным подходом к каждому пациенту.				</p>
+
+				<div class="footer-icons">
+					<a href="#"><i class="fa fa-facebook"></i></a>
+					<a href="#"><i class="fa fa-twitter"></i></a>
+					<a href="#"><i class="fa fa-linkedin"></i></a>
+					<a href="#"><i class="fa fa-github"></i></a>
+
+				</div>
+			</div>
+		</footer>
+		<script src="../src/scripts/newService.js"></script>
+</body>
+</html>

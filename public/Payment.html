@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../public/images/logo.png" />
+    <link rel="stylesheet" href="../src/styles/indexPage.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+	<title>Dental Clinic</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+			<img src="../public/images/logo.png" alt="Логотип" class="logo">
+			<h3 class="clinic-name">Dental<span>clinic</span></h3>
+			<div class="tabs">
+                <div class="tab"><a href="../public/index.html" style="text-decoration: none; color: black;">Главная</a></div>
+                <div class="tab"><a href="../public/SecondPage.html" style="text-decoration: none; color: black;">Каталог услуг</a></div>
+                <div class="tab"><a href="../public/AppointmentPage.html" style="text-decoration: none; color: black;">Запись на прием</a></div>
+                <div class="tab"><a href="../public/AllPatients.html" style="text-decoration: none; color: black;">Пациенты</a></div>
+				<div class="tab active">Платёж</div>
+
+			</div>
+            <button class="login-button">Войти</button>
+        </div>
+    </header>
+    <main class="main">
+        <div class="container">
+            <div class="left-section" style="margin-left: 80px; margin-top: 120px;">
+              <!-- Форма для ввода информации о пациенте и деталях платежа -->
+              <div class="text2" style="margin-left: 120px;">
+                Оплата услуг 🧾
+              </div>
+              <form id="paymentForm">
+                <div>
+                  <label for="patientSelect">Выберите пациента:</label>
+                  <select id="patientSelect" name="patientSelect">
+                  </select>
+                  <button type="button" class="button" onclick="createPatient()">Добавить пациента</button>
+                </div>
+              
+                <!-- Выбор услуги -->
+                <div class="service-container" id="additionalServiceContainer">
+                    <label style="margin-top: 10px;"  >Выберите услугу:</label>
+                    <select style="width: 500px;margin-right: 50px; margin-top: 40px;" id="serviceSelect1" name="serviceSelect" class="select-with-search">
+                    </select>
+                
+                    <button type="button" class="login-button" onclick="addServiceSelect()">+</button>
+                  </div>
+              <div>
+                      <label for="amount">Сумма платежа:</label>
+                  <input type="text" id="amount" name="amount" placeholder="Цена" required> 
+                </div>
+              
+                <div>
+                  <label for="paymentDate">Дата и время платежа:</label>
+                  <input type="datetime-local" id="paymentDate" name="paymentDate">
+                </div>
+              
+                <div>
+                  <label for="registrationEmployee">Сотрудник регистратуры:</label>
+                  <select id="registrationEmployee" name="registrationEmployee">
+                  </select>
+                
+                </div>
+              
+                <!--  оплаты и создания нового пациента -->
+                <div>
+                  <button type="submit" class="login-button">Оплатить</button>
+                  <button type="button" class="login-button" onclick="exportData()">Экспорт данных</button>
+                </div>
+                <div class="popup-message" id="successMessage">
+                  Payment successfully added!
+                </div>
+              
+              </form>
+              
+            </form>
+                <div class="payment-list" >
+                  <script src="../src/scripts/paymentList.js"></script>
+                <h2 style="color: #3167D9; margin-left: 120px;">Список платежей</h2>
+                <input type="text" id="searchPayment" 	style="margin-left: 120px; width: 450px;"
+                placeholder="Поиск по ФИО пациента">
+                <input type="date" id="dateFilter"  style="margin-left: 120px; height: 35px;">
+                <button id="filterBtn" class="login-button" style="margin-left: 10px;">Применить фильтр</button>
+
+                <ul id="paymentList"></ul>
+
+                <ul id="paymentList">
+                      <div id="paymentData" style="margin-left: 100px; width: 1080px;"></div>
+
+                  </li>                
+                </ul>
+              </div>
+            </div>
+          </div>
+          <p>dff</p>
+          <p>dff</p>
+          <p>dff</p>
+
+<script>
+  function addServiceSelect() {
+    const newServiceSelect = document.createElement('select');
+    newServiceSelect.name = 'serviceSelect';
+    newServiceSelect.className = 'select-with-search';
+
+    const services = [
+      { id: 1, text: 'Чистка зубов' },
+      { id: 2, text: 'Полировка зубов' },
+      { id: 3, text: 'Удаление зубов' },
+    ];
+
+    services.forEach(service => {
+      const option = new Option(service.text, service.id, false, false);
+      newServiceSelect.add(option);
+    });
+
+    const serviceContainer = document.querySelector('.service-container');
+    serviceContainer.appendChild(newServiceSelect);
+
+    $('.select-with-search').select2();
+  }
+
+  $(document).ready(function() {
+    $('.select-with-search').select2();
+  });
+</script>
+            <!--  библиотеки Select2 (jQuery необходим) -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        </main>
+
+	<footer class="footer-distributed">
+			<div class="footer-left">
+				<h3>Dental<span>clinic</span></h3>
+				<p class="footer-links">
+					<a href="../public/index.html" class="link-1">Главная</a>
+					
+					<a href="../SecondPage/index.html">Каталог услуг</a>
+				
+					<a href="#">Запись на приём</a>
+				
+					<a href="#">Пациенты</a>
+					
+					<a href="#">Платёж</a>
+				
+				</p>
+				<p class="footer-company-name">Dental Clinic © 2023 - Все права защищены</p>
+			</div>
+			<div class="footer-center">
+				<div>
+					<i class="fa fa-map-marker"></i>
+					<p><span>ул. Калинина, д.15, к.1</span> м. Авиамоторная, Москва</p>
+				</div>
+				<div>
+					<i class="fa fa-phone"></i>
+					<p>+7(927)232-23-44</p>
+				</div>
+				<div>
+					<i class="fa fa-envelope"></i>
+					<p><a href="mailto:support@company.com">dental@mail.com</a></p>
+				</div>
+			</div>
+
+			<div class="footer-right">
+
+				<p class="footer-company-about">
+					<span>О нас</span>
+					Наши стоматологи предоставляют высококачественные услуги для создания здоровой и красивой улыбки с индивидуальным подходом к каждому пациенту.				</p>
+
+				<div class="footer-icons">
+					<a href="#"><i class="fa fa-facebook"></i></a>
+					<a href="#"><i class="fa fa-twitter"></i></a>
+					<a href="#"><i class="fa fa-linkedin"></i></a>
+					<a href="#"><i class="fa fa-github"></i></a>
+
+				</div>
+			</div>
+		</footer>
+    <script src="../src/scripts/payment.js"></script>
+
+</body>
+</html>

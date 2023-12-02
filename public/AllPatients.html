@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../public/images/logo.png" />
+    <link rel="stylesheet" href="../src/styles/indexPage.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<title>Dental Clinic</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+			<img src="../public/images/logo.png" alt="Логотип" class="logo">
+			<h3 class="clinic-name">Dental<span>clinic</span></h3>
+			<div class="tabs">
+                <div class="tab"><a href="../public/index.html" style="text-decoration: none; color: black;">Главная</a></div>
+                <div class="tab"><a href="../public/SecondPage.html" style="text-decoration: none; color: black;">Каталог услуг</a></div>
+                <div class="tab"><a href="../public/AppointmentPage.html" style="text-decoration: none; color: black;">Запись на прием</a></div>
+                <div class="tab active">Пациенты</div>
+                <div class="tab"><a href="../public/Payment.html" style="text-decoration: none; color: black;">Платёж</a></div>
+			</div>
+            <button class="login-button">Войти</button>
+        </div>
+    </header>
+    <main class="main">
+        <div class="container">
+          <div class="left-section" style="margin-left: 80px; margin-top: 120px;">
+            <div class="text2">
+              Наши дорогие пациенты💙
+            </div>
+            <input type="text" class="special-input" placeholder="Поиск по ФИО пациента">
+            <input type="text" class="special-input" placeholder="Поиск по ФИО лечащего врача">
+            <div class="filter">
+              <label for="rating">По возрастной категории:</label>
+              <select id="rating">
+                <option value="">Дети</option>
+                <option value="">Взрослые</option>
+              </select>
+              <button type="button" class="button" onclick="createPatient()">Добавить пациента</button>
+
+            </div>
+        </div>
+   </div>
+          <div class="cards-container">
+            <div class="card">
+              <div class="patient-info">
+                <h2>ФИО: Иванов Иван Иванович</h2>
+                <p>Дата рождения: 01.01.1980</p>
+                <p>Медицинская карта №: 238985</p>
+                <p>Врач: Васильева Наталья</p>
+              </div>
+              <button class="details-button">Подробнее</button>
+            </div>
+            <div class="card">
+              <div class="patient-info">
+                <h2>ФИО: Иванов Иван Иванович</h2>
+                <p>Дата рождения: 01.01.1980</p>
+                <p>Медицинская карта №: 238985</p>
+                <p>Врач: Васильева Наталья</p>
+              </div>
+              <button class="details-button">Подробнее</button>
+            </div>
+        
+        </div>
+		<p>Текст в основном меню</p>
+        <p>njkn</p>
+		<p>njkn</p>
+		<p>njkn</p>
+      </main>
+      
+	
+	<footer class="footer-distributed">
+			<div class="footer-left">
+				<h3>Dental<span>clinic</span></h3>
+				<p class="footer-links">
+					<a href="../public/index.html" class="link-1">Главная</a>
+					
+					<a href="../SecondPage/index.html">Каталог услуг</a>
+				
+					<a href="#">Запись на приём</a>
+				
+					<a href="#">Пациенты</a>
+					
+					<a href="#">Платёж</a>
+				
+				</p>
+				<p class="footer-company-name">Dental Clinic © 2023 - Все права защищены</p>
+			</div>
+			<div class="footer-center">
+				<div>
+					<i class="fa fa-map-marker"></i>
+					<p><span>ул. Калинина, д.15, к.1</span> м. Авиамоторная, Москва</p>
+				</div>
+				<div>
+					<i class="fa fa-phone"></i>
+					<p>+7(927)232-23-44</p>
+				</div>
+				<div>
+					<i class="fa fa-envelope"></i>
+					<p><a href="mailto:support@company.com">dental@mail.com</a></p>
+				</div>
+			</div>
+
+			<div class="footer-right">
+
+				<p class="footer-company-about">
+					<span>О нас</span>
+					Наши стоматологи предоставляют высококачественные услуги для создания здоровой и красивой улыбки с индивидуальным подходом к каждому пациенту.				</p>
+
+				<div class="footer-icons">
+					<a href="#"><i class="fa fa-facebook"></i></a>
+					<a href="#"><i class="fa fa-twitter"></i></a>
+					<a href="#"><i class="fa fa-linkedin"></i></a>
+					<a href="#"><i class="fa fa-github"></i></a>
+
+				</div>
+			</div>
+		</footer>
+</body>
+</html>
