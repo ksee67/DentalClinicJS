@@ -16,53 +16,50 @@
 			<h3 class="clinic-name">Dental<span>clinic</span></h3>
 			<div class="tabs">
                 <div class="tab"><a href="../public/index.html" style="text-decoration: none; color: black;">Главная</a></div>
-                <div class="tab"><a href="../public/SecondPage.html" style="text-decoration: none; color: black;">Каталог услуг</a></div>
+                <div class="tab">Каталог услуг</div>
                 <div class="tab"><a href="../public/AppointmentPage.html" style="text-decoration: none; color: black;">Запись на прием</a></div>
-                <div class="tab active">Пациенты</div>
+                <div class="tab active"><a href="../public/AllPatients.html" style="text-decoration: none; color: black;">Пациенты</a></div>
                 <div class="tab"><a href="../public/Payment.html" style="text-decoration: none; color: black;">Платёж</a></div>
 			</div>
             <button class="login-button">Войти</button>
         </div>
     </header>
-    <main class="main">
-        <div class="container">
-          <div class="left-section" style="margin-left: 80px; margin-top: 120px;">
-            <div class="text2">
-              Наши дорогие пациенты💙
-            </div>
-            <input type="text"  class="special-input" placeholder="Поиск по ФИО пациента">
-            <button id="searchButton">Искать</button>
+    <main class="main" >
+        <div class="catalog">
+            <a href="../public/AllPatients.html" ">Пациенты в клинике “Dental Clinic”</a>
+            <span>←</span>
+            <a href="../public/Добавление пациентов.html">Добавление пациентов</a>
+        </div>
+		<div class="header3">
+            <form action="/addPatient" method="POST">
+                <label for="surname">Фамилия:</label>
+                <input type="text" id="surname" name="surname" required><br><br>
+                
+                <label for="name">Имя:</label>
+                <input type="text" id="name" name="name" required><br><br>
+                
+                <label for="middle">Отчество:</label>
+                <input type="text" id="middle" name="middle"><br><br>
+                
+                <label for="dob">Дата рождения:</label>
+                <input type="date" id="dob" name="dob" required><br><br>
+                
+                <label for="phone">Номер телефона:</label>
+                <input type="tel" id="phone" name="phone" pattern="^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$" required
+                       title="Введите номер в формате +7(9XX)XXX-XX-XX">
+                
+                <label for="address">Адрес:</label>
+                <textarea id="address" name="address" required></textarea><br><br>
+                
+                <input type="submit" value="Добавить пациента">
+            </form>
+		</div>
+		
+		<p>njkn</p>
+		<p>njkn</p>
+		<p>njkn</p>
 
-            <div class="filter">
-              <label for="rating">По возрастной категории:</label>
-              <select id="rating">
-                <option value="">Все</option>
-                <option value="">Дети</option>
-                <option value="">Взрослые</option>
-              </select>
-              <button type="button" class="button" onclick="window.location.href='../public/PatientAdd.html'">Добавить пациента</button>
-            </div>
-        </div>
-   </div>
-          <div class="cards-container">
-            <div class="card">
-              <div class="patient-info">
-         
-              </div>
-              <div class="vertical-cards">
-              </div>
-            </div>
-              <button class="details-button">Подробнее</button>
-            </div>
-            <div class="pagination">
-            </div>
-        </div>
-		<p>Текст в основном меню</p>
-        <p>njkn</p>
-		<p>njkn</p>
-		<p>njkn</p>
-      </main>
-      
+    </main>
 	
 	<footer class="footer-distributed">
 			<div class="footer-left">
@@ -111,7 +108,7 @@
 				</div>
 			</div>
 		</footer>
-    <script src="../src/scripts/patientView.js"></script>
+        <script src="../src/scripts/patientAdd.js"></script>
 
 </body>
 </html>

@@ -39,15 +39,15 @@ function handleTimeSlotChange() {
   const timeDropdown = document.getElementById('time');
   timeDropdown.addEventListener('change', async function() {
     try {
-      const selectedTimeSlotId = this.value; // Получаем выбранное значение временного слота
-      const timeDropdown = document.getElementById('time');
+      const selectedTimeSlotId = this.value;
       timeDropdown.innerHTML = '';
-      await fillTimeSlotsDropdown(); // Заново заполнить выпадающий список временных слотов
+      await fillTimeSlotsDropdown(); 
     } catch (error) {
       console.error('Ошибка при обработке изменения временного слота:', error);
     }
   });
 }
+
 
 
 async function fetchDoctors() {
@@ -66,7 +66,12 @@ async function fetchDoctors() {
 async function fillDoctorsDropdown() {
   try {
     const doctors = await fetchDoctors();
-    const doctorDropdown = document.getElementById('doctor');
+const doctorDropdown = document.getElementById('doctor');
+
+doctorDropdown.addEventListener('change', function() {
+  const selectedDoctorId = this.value;
+  fillSpecializationsDropdown(selectedDoctorId);
+});
 
     doctors.forEach(doctor => {
       const option = document.createElement('option');
@@ -139,16 +144,6 @@ function formatTime(timeValue) {
 
   return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 }
-function handleTimeSlotChange() {
-  const timeDropdown = document.getElementById('time');
-  timeDropdown.addEventListener('change', function() {
-    const selectedTimeSlotId = this.value; // Получаем выбранное значение временного слота
-
-    const timeDropdown = document.getElementById('time');
-    timeDropdown.innerHTML = '';
-    fillTimeSlotsDropdown(); // Заново заполнить выпадающий список временных слотов
-  });
-}
 
 function checkForSunday() {
   const inputDate = document.getElementById('selectedDate');
@@ -194,45 +189,50 @@ function checkForSunday() {
     }
     const addAppointmentButton = document.getElementById('addAppointmentButton');
 
-  addAppointmentButton.addEventListener('click', async () => {
-  
+    addAppointmentButton.addEventListener('click', async () => {
       try {
         const selectedDoctorId = document.getElementById('doctor').value;
         const selectedPatientId = document.getElementById('patient').value;
-        let selectedTimeSlotId = document.getElementById('time').value;
+        const selectedTimeSlotId = document.getElementById('time').value;
         const selectedDate = document.getElementById('selectedDate').value;
     
-      // Проверка на undefined или null
-      if (selectedTimeSlotId !== undefined && selectedTimeSlotId !== null && selectedTimeSlotId !== '') {
-        selectedTimeSlotId = parseInt(selectedTimeSlotId); // Преобразование в число, если необходимо
-        const response = await fetch('http://localhost:3001/appointments', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            Doctor_ID: selectedDoctorId,
-            Patient_ID: selectedPatientId,
-            TimeSlot_ID: selectedTimeSlotId,
-            Date_of_Appointment: selectedDate,
-          }),
-        });
+        const responseAppointments = await fetchAppointments();
+        const existingAppointment = responseAppointments.find(appointment =>
+          appointment.Doctor_ID === selectedDoctorId &&
+          appointment.Date_of_Appointment === selectedDate &&
+          appointment.TimeSlot_ID === selectedTimeSlotId
+        );
+    
+        if (existingAppointment) {
+          alert('Данная дата и время заняты у выбранного врача. Пожалуйста, выберите другую дату или время.');
+        } else {
+          // Код для добавления новой записи на прием
+          const response = await fetch('http://localhost:3001/appointments', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              Doctor_ID: selectedDoctorId,
+              Patient_ID: selectedPatientId,
+              TimeSlot_ID: parseInt(selectedTimeSlotId),
+              Date_of_Appointment: selectedDate,
+            }),
+          });
     
           if (response.ok) {
             alert('Запись успешно добавлена');
           } else {
             throw new Error('Ошибка при добавлении записи');
           }
-        } else {
-          console.error('Ошибка: Некорректное значение selectedTimeSlotId');
-          alert('Произошла ошибка при добавлении записи: Некорректное значение временного слота');
         }
       } catch (error) {
         console.error('Ошибка при добавлении записи:', error);
         alert('Произошла ошибка при добавлении записи');
       }
     });
-  });
+    
+  }),
   
   window.onload = function () {
     fillDoctorsDropdown();
@@ -242,4 +242,5 @@ function checkForSunday() {
       searchInput.addEventListener('keyup', searchPatients);
     }
   };
+  
   

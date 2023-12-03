@@ -78,11 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
     displayAppointments(filteredAppointments);
   }
   function editAppointment(appointment) {
-    // Здесь можно добавить логику для редактирования записи
-    // Например, можно открыть модальное окно с формой редактирования
-    // или отправить данные на сервер для изменения записи
-    console.log('Редактирование записи:', appointment);
+    const appointmentId = appointment.ID_AppointmentSchedule;
+    localStorage.setItem('selectedAppointmentId', appointmentId);
+    const url = `AppointmentDetail.html?id=${appointmentId}`;
+    window.location.href = `${url}?id=${appointmentId}`;
   }
+  
+  
   startDateInput.addEventListener('change', handleDateSelection);
   endDateInput.addEventListener('change', handleDateSelection);
 

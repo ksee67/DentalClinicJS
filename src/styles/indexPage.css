@@ -739,3 +739,45 @@ body {
       padding: 20px;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
+/* Для пациентов  */
+
+.catalog {
+    display: flex;
+    align-items: center;
+	margin-right: 140px;
+}
+
+.catalog a {
+    text-decoration: none;
+    color: #3167D9; 
+    margin: 0 5px; /* Отступы  */
+}
+
+.catalog span {
+    margin: 0 5px; /* Отступы  */
+}
+.header3 {
+    background-size: cover;
+    text-align: left;
+    padding: 20px;
+}
+.cards-container {
+	display: flex;
+	flex-wrap: wrap; /* Позволяет элементам переходить на новую строку */
+	justify-content: space-between; /* Равномерное распределение по ширине */
+  }
+  
+  .card {
+	width: calc(30% - 10px); /* 30% ширины контейнера (минус отступы) */
+	margin-bottom: 20px;
+	/* Дополнительные стили */
+	border: 1px solid #ccc;
+	padding: 10px;
+	box-sizing: border-box;
+  }
+  
+  /* Для последней строки карточек */
+  .card:nth-child(3n+1) {
+	margin-right: 0;
+  }
+  

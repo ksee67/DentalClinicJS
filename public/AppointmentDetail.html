@@ -34,15 +34,32 @@
                 </div>
                 <div id="modal" class="modal">
                     <div class="modal-content">
-                      <span class="close">&times;</span>
                       <h2>Изменение и удаление записи</h2>
-                      <form id="editForm">
-                        <!-- Ваши поля для редактирования данных -->
-                        <label for="editDate">Дата приема:</label>
-                        <input type="date" id="editDate" name="editDate">
-                  
-                        <!-- Другие поля для редактирования -->
-                  
+                      <div class="input-section" style="margin-left: 30px;">
+                        <label for="doctor" style="font-size: 26px; margin-left: 10px;">Врач:</label>
+                        <select id="doctor"style="font-size: 26px; margin-bottom: 50px; margin-top: 20px;"></select>
+                    </div>
+                    <div class="input-section" style="margin-left: 30px;">
+                        <label for="specialization" style="font-size: 26px; margin-left: 10px;">Отделение:</label>
+                        <select id="specialization" name="specialization" style="font-size: 26px; margin-bottom: 50px; margin-top: 20px;">
+                        </select>
+                    </div>
+                    <div class="input-section" style="margin-left: 30px;">
+                        <label for="day" style="font-size: 26px; margin-left: 10px;">Выберите день недели:</label>
+                  <input type="date" id="selectedDate" style="font-size: 26px; margin-bottom: 50px; margin-top: 20px;" onchange="checkForSunday()">
+                </div>
+    
+                  <div class="input-section" style="margin-left: 30px;">
+    
+                        <label for="time" style="font-size: 26px; margin-left: 10px;">Выберите время:</label>
+                        <select id="time" style="font-size: 26px; margin-bottom: 50px; margin-top: 20px;"></select>
+                      </div>
+                 </div>
+                 <div class="input-section" style="margin-left: 30px;">
+                    <label for="searchPatient" style="font-size: 26px; margin-left: 10px;">Поиск пациента:</label>
+                    <select id="patient">  </select>
+                    <input type="text" id="searchPatient" placeholder="Поиск по пациентам">
+                    </div>
                         <div class="btn-group">
                           <button type="submit" id="editSubmit">Изменить</button>
                           <button type="button" id="deleteSubmit">Удалить</button>
@@ -110,6 +127,7 @@
 		</footer>
         <script src="../src/scripts/appointmentView.js"></script>
         <script src="../src/scripts/appointmerntNew.js"></script>
+        <script src="../src/scripts/appointmentUpdate.js"></script>
 
 </body>
 </html>

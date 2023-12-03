@@ -46,19 +46,35 @@ app.post('/appointments', (req, res) => {
 
   const sql = 'INSERT INTO AppointmentSchedule (Date_of_Appointment, Doctor_ID, Patient_ID, TimeSlot_ID) VALUES (?, ?, ?, ?)';
   const values = [
-    appointmentData.Date_of_Appointment, 
-    appointmentData.Doctor_ID, 
-    appointmentData.Patient_ID, 
-    appointmentData.TimeSlot_ID
+    appointmentData.Date_of_Appointment,
+    appointmentData.Doctor_ID,
+    appointmentData.Patient_ID,
+    appointmentData.TimeSlot_ID,
   ];
 
   pool.query(sql, values, (error, results) => {
-    if (error) {
+    if (error && error.code === 'ER_SIGNAL_EXCEPTION') {
+      // Обработка ошибки, вызванной триггером
+      console.error('Ошибка вставки записи: Данная дата и время заняты у выбранного врача.');
+      res.status(400).json({ error: 'Данная дата и время заняты у выбранного врача. Выберите другую дату или время.' });
+    } else if (error) {
       console.error('Ошибка при добавлении записи:', error);
       res.status(500).json({ error: 'Ошибка при добавлении записи' });
     } else {
       res.status(200).json({ message: 'Запись успешно добавлена', data: results });
     }
+  });
+});
+// Express маршрут для получения списка пациентов
+app.get('/patientsAll', (req, res) => {
+  const sql = 'SELECT * FROM Patient';
+  pool.query(sql, (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.json(results); // Отправляем данные о пациентах в формате JSON на клиент
   });
 });
 
@@ -134,7 +150,25 @@ app.get('/patients', (req, res) => {
     }
   });
 });
+app.post('/addPatient', (req, res) => {
+  const { surname, name, middle, dob, phone, address } = req.body;
 
+  const sql = `INSERT INTO Patient (Surname_patient, Name_patient, Middle_patient, Date_of_birth, Phone_number, Adress_patient) VALUES (?, ?, ?, ?, ?, ?)`;
+  pool.query(sql, [surname, name, middle, dob, phone, address], (error, results) => {
+    if (error) {
+      if (error.code === 'ER_DATA_TOO_LONG') {
+        res.status(400).send('Превышена максимальная длина для некоторых полей');
+      } else if (error.code === 'ER_TRUNCATED_WRONG_VALUE_FOR_FIELD') {
+        res.status(400).send('Неверный формат данных в поле телефона');
+      } else {
+        console.error('Ошибка запроса: ' + error.message);
+        res.status(500).send('Ошибка сервера');
+      }
+      return;
+    }
+    res.send('Пациент успешно добавлен');
+  });
+});
 // Получение данных из таблицы AppointmentSchedule
 app.get('/appointments', (req, res) => {
   const sql = 'SELECT * FROM AppointmentSchedule';
@@ -147,6 +181,39 @@ app.get('/appointments', (req, res) => {
     res.json(results); // Отправляем данные в формате JSON на клиент
   });
 });
+// Удаление записи из таблицы AppointmentSchedule по id
+app.delete('/appointments/:id', (req, res) => {
+  const appointmentId = req.params.id;
+  const sql = `DELETE FROM AppointmentSchedule WHERE id = ?`;
+  pool.query(sql, [appointmentId], (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.send('Запись удалена успешно');
+  });
+});
+app.put('/appointments/:id', (req, res) => {
+  const id = req.params.id;
+  const { Date_of_Appointment, Doctor_ID, Patient_ID, TimeSlot_ID } = req.body;
+  const sql = 'UPDATE AppointmentSchedule SET Date_of_Appointment = ?, Doctor_ID = ?, Patient_ID = ?, TimeSlot_ID = ? WHERE ID_AppointmentSchedule = ?';
+  pool.query(sql, [Date_of_Appointment, Doctor_ID, Patient_ID, TimeSlot_ID, id], (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      if (error.code === 'ER_SIGNAL_EXCEPTION') {
+        // Обработка ошибки, связанной с триггером prevent_duplicate_appointments
+        console.error('Триггер prevent_duplicate_appointments сработал: ' + error.message);
+        res.status(400).send('Ошибка: ' + error.message); // Или любой другой код статуса по вашему выбору
+      } else {
+        res.status(500).send('Ошибка сервера');
+      }
+      return;
+    }
+    res.send('Запись обновлена успешно');
+  });
+});
+
 
 // Получение платежей
 app.get('/payments', (req, res) => {
