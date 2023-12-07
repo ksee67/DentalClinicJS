@@ -28,23 +28,22 @@
     <main class="main" >
 		<div class="center">
             <h1>Авторизация</h1>
-            <form action="" method="POST">
-                <div class="txt_field">
-                    <input type="text" name="text" required>
-                    <span></span>
-                    <label>Логин</label>
-                </div>
-                <div class="txt_field">
-                    <input type="password" name="password" required>
-                    <span></span>
-                    <label>Пароль</label>
-                </div>
-                <div class="pass">Забыли пароль?</div>
-                <input name="submit" type="Submit" value="Войти">
-                <div class="signup_link">
-                    Ещё не зарегистрированы? <a href="#"> Зарегистрироваться</a>
-                </div>
-            </form>
+			<form id="loginForm">
+				<h3>Login Here</h3>
+				<div style="position: relative;">
+				  <label for="username">Email</label>
+				  <input type="text" placeholder="Enter an Email" id="username" name="email">
+				  <span class="error-balloon" id="emailError">Please enter a valid email</span>
+				</div>
+				<div style="position: relative;">
+				  <label for="password">Password</label>
+				  <input type="password" placeholder="Password" id="password" name="password">
+				  <span class="error-balloon" id="passwordError">Password must be at least 8 characters</span>
+				</div>
+				<button type="submit" id="loginButton">Log In</button>
+				<button class="register_btn" id="registerButton">Registration</button>
+			  </form>
+			
         </div>
     </main>
 	<footer class="footer-distributed">
@@ -99,6 +98,7 @@
 			</div>
 
 		</footer>
+		<script src="/src/scripts/userController.js"></script>
 </body>
 
 </html>

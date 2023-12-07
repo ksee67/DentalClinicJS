@@ -1,0 +1,28 @@
+###
+DELETE http://localhost:4000/logout
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJla2F0ZXJpbmFfcGV0cm92IiwicGFzc3dvcmQiOiJTZWN1cmVQYXNzd29yZDQ1NiEiLCJpYXQiOjE3MDE2Nzc2NTUsImV4cCI6MTcwMTY3NzcxNX0.QKF0iGBItMzXLhYzqZY_bLRaLkj_yzviEuJHuOWLNDc"
+}
+
+###
+POST http://localhost:4000/token
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJla2F0ZXJpbmFfcGV0cm92IiwicGFzc3dvcmQiOiJTZWN1cmVQYXNzd29yZDQ1NiEiLCJpYXQiOjE3MDE2Nzc2MDl9.EnecYTOlLU08BXtt-AtH6XXUvb2sRo5QtG7YRtba0_M"
+}
+
+###
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+  "email": "maria_smirnov",
+  "password": "ComplexPass789!"
+}
+
+###
+GET http://localhost:4000/current-user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJpdmFuQGV4YW1wbGUuY29tIiwicGFzc3dvcmQiOiJzZWNyZXRQYXNzd29yZCIsImlhdCI6MTcwMTYyNDg2MywiZXhwIjoxNzAxNjI0OTIzfQ.S9NGs2X7tvhlAkAmGnj_LWGTO7yOczpGZCt2DWVNxsI

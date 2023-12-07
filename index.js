@@ -279,6 +279,26 @@ app.get('/doctors/:id', (req, res) => {
 });
 
 
+
+app.get('/user/:id', (req, res) => {
+  const userId = req.params.id; 
+
+  const sql = 'SELECT Name_doctor FROM Doctor WHERE ID_Doctor = ?';
+  pool.query(sql, userId, (err, results) => {
+    if (err) {
+      console.error('Ошибка при запросе пользователя из базы данных:', err);
+      return res.status(500).json({ error: 'Ошибка при запросе пользователя' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Пользователь не найден' });
+    }
+
+    const userName = results[0].Name_doctor; 
+    res.json({ name: userName }); 
+  });
+});
+
 app.listen(port, () => {
   console.log('Сервер запущен на порту 3001');
 });
