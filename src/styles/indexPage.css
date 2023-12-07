@@ -504,7 +504,14 @@ input.special-input:hover {
 .filter label, select {
     margin-right: 10px;
 }
+.sorting {
+    text-align: right;
+    margin: 10px;
+}
 
+.sorting label, select {
+    margin-right: 10px;
+}
 .services {
     padding: 20px;
 	grid-template-columns: repeat(2, 1fr);
@@ -763,21 +770,33 @@ body {
 }
 .cards-container {
 	display: flex;
+	gap: 6px; /* Уменьшаем расстояние между карточками до 10px */
 	flex-wrap: wrap; /* Позволяет элементам переходить на новую строку */
 	justify-content: space-between; /* Равномерное распределение по ширине */
   }
   
   .card {
-	width: calc(30% - 10px); /* 30% ширины контейнера (минус отступы) */
+	width: calc(25% - 5px); /* Уменьшаем ширину карточек до 25% */
 	margin-bottom: 20px;
 	/* Дополнительные стили */
 	border: 1px solid #ccc;
 	padding: 10px;
 	box-sizing: border-box;
+	transition: transform 0.3s ease-in-out;
+
+  }
+  
+  .card:hover {
+	transform: scale(1.1); /* Увеличение карточки при наведении на неё */
   }
   
   /* Для последней строки карточек */
   .card:nth-child(3n+1) {
 	margin-right: 0;
+  }
+  .pagination {
+	display: flex;
+	justify-content: center; /* Центрируем содержимое по горизонтали */
+	gap: 5px; /* Отступ между элементами */
   }
   

@@ -81,10 +81,13 @@
               
             </form>
                 <div class="payment-list" >
+                  
                   <script src="../src/scripts/paymentList.js"></script>
                 <h2 style="color: #3167D9; margin-left: 120px;">Список платежей</h2>
                 <input type="text" id="searchPayment" 	style="margin-left: 120px; width: 450px;"
                 placeholder="Поиск по ФИО пациента">
+                <button id="refreshButton">&#10227;</button>
+
                 <input type="date" id="dateFilter"  style="margin-left: 120px; height: 35px;">
                 <button id="filterBtn" class="login-button" style="margin-left: 10px;">Применить фильтр</button>
 
@@ -129,7 +132,6 @@
     $('.select-with-search').select2();
   });
 </script>
-            <!--  библиотеки Select2 (jQuery необходим) -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>

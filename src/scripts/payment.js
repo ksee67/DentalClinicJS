@@ -129,4 +129,11 @@ window.addEventListener('load', () => {
  }
 });
 });
-// Функция для загрузки и отображения платежей
+// Получаем кнопку обновления
+const refreshButton = document.getElementById('refreshButton');
+
+// Добавляем обработчик события 'click' для кнопки
+refreshButton.addEventListener('click', () => {
+  // Перезагружаем страницу
+  location.reload();
+});

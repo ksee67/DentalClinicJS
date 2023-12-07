@@ -26,50 +26,55 @@
         </div>
     </header>
     <main class="main">
-        <div class="container">
-          <div class="left-section" style="margin-left: 80px; margin-top: 120px;">
-            <div class="text2">
-              Наши дорогие пациенты💙
-            </div>
-            <input type="text"  class="special-input" placeholder="Поиск по ФИО пациента">
-                 <!-- Здесь будут данные из базы данных
- <button id="searchButton">Искать</button> -->
-            <div class="sorting">
-              <label>Сортировать: </label>
-              <button class="button" style="text-align: center;" id="sortAscButton">А↓</button>
-              <button class="button" style="text-align: center;" id="sortDescButton">Я↑</button>              
-          </div>
-            <div class="filter">
-              <label for="rating">По возрастной категории:</label>
-              <select id="rating">
-                <option value="">Все</option>
-                <option value="">Дети</option>
-                <option value="">Взрослые</option>
-              </select>
-              <button type="button" class="button" onclick="window.location.href='../public/PatientAdd.html'">Добавить пациента</button>
-            </div>
+        <div class="catalog">
+            <a href="../public/AllPatients.html" ">Пациенты в клинике “Dental Clinic”</a>
+            <span>←</span>
+            <a href="../public/MedicalHistory.html">История болезни пациента</a>
         </div>
-   </div>
-          <div class="cards-container">
-            <div class="card">
-              <div class="patient-info">
-         
-              </div>
-              <div class="vertical-cards">
-              </div>
-            </div>
-              <button class="details-button">Подробнее</button>
-            </div>
-            <p style="color: #f3f5f9;">-</p>
-
-            <div style="align-content: center;" class="pagination">
-            </div>
+          <div class="left-section" style="margin-left: 80px; margin-top: 30px;">
+            <label for="patient">Пациент:</label>
+            <select id="patient" name="patient">
+              <!-- Опции для комбобокса Patient  disabled-->
+            </select>     
+        
+            <label for="start_date">Дата начала лечения:</label>
+            <input type="date" id="start_date" name="start_date">
+            
+            <label for="end_date">Дата окончания лечения:</label>
+            <input type="date" id="end_date" name="end_date">
+            
+            <label for="treatment">Лечение:</label>
+            <textarea id="treatment" name="treatment" rows="4" cols="50"></textarea>
+            
+            <label for="notes">Заметки:</label>
+            <textarea id="notes" name="notes" rows="4" cols="50"></textarea>
+            <label for="diagnosis">Диагноз:</label>
+          <div сlass="conteiner">
+            <select id="diagnosis" name="diagnosis">
+              <!-- Опции для комбобокса Diagnosis_ID -->
+            </select>
+            <label for="searchDiagnosis">Поиск по диагнозу:</label>
+            <input type="text" id="searchDiagnosis" placeholder="Поиск по диагнозу">
           </div>
-        </div>
+          
+            <button id="addButton" class="login-button" style="margin-left: 0px;">Добавить</button>   
+      
+          </div>
+          <button id="refreshButton">&#10227;</button>
 
-		<p style="color: #f3f5f9;">-</p>
+ <div class="left-section" style="margin-left: 80px; margin-top: 120px;">
+    <!-- Ваши поля ввода -->
+</div>
+<div class="text3" style="size: 55px;">
+  История болезней
+</div>
+<div class="data-window" contenteditable="true">
+    <!-- Здесь будет отображаться информация о пациенте -->
+</div>
+        <p style="color: #f3f5f9;">-</p>
+        <p style="color: #f3f5f9;">-</p>
+        <p style="color: #f3f5f9;">-</p>
 
-    <p>Данные не найдены</p>
 		<p>njkn</p>
 		<p>njkn</p>
       </main>
@@ -125,6 +130,5 @@
     <script src="../src/scripts/patientView.js"></script>
     <script src="../src/scripts/patientAdd.js"></script>
     <script src="../src/scripts/medicalhistory.js"></script>
-
 </body>
 </html>

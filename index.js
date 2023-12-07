@@ -65,6 +65,92 @@ app.post('/appointments', (req, res) => {
     }
   });
 });
+// GET запрос для получения информации о медицинской истории по ID
+app.get('/medicalHistory/:id', (req, res) => {
+  const medicalHistoryId = req.params.id;
+  const sql = 'SELECT * FROM Medical_history WHERE ID_Medical_history = ?';
+  pool.query(sql, [medicalHistoryId], (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).send('Медицинская история не найдена');
+      return;
+    }
+    res.json(results[0]); // Отправляем данные о медицинской истории в формате JSON на клиент
+  });
+});
+app.post('/medical-history', (req, res) => {
+  const { Start_date, End_date, Treatment, Notes, Diagnosis_ID } = req.body;
+  const sql = 'INSERT INTO Medical_history (Start_date, End_date, Treatment, Notes, Diagnosis_ID) VALUES (?, ?, ?, ?, ?)';
+  pool.query(sql, [Start_date, End_date, Treatment, Notes, Diagnosis_ID], (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.status(201).send('Запись успешно добавлена');
+  });
+});
+
+// GET запрос для добавления нового диагноза
+app.get('/diagnosis', (req, res) => {
+  const sql = 'SELECT * FROM Diagnosis';
+  pool.query(sql, (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.json(results); // Отправляем данные о диагнозах в формате JSON на клиент
+  });
+});
+
+app.get('/diagnosis/:id', (req, res) => {
+  const diagnosisId = req.params.id; // Получаем ID из параметров запроса
+  const sql = 'SELECT * FROM Diagnosis WHERE ID_Diagnosis = ?'; // SQL-запрос для получения диагноза по ID
+  pool.query(sql, [diagnosisId], (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.json(results[0]); // Отправляем данные о диагнозе в формате JSON на клиент
+  });
+});
+
+// POST запрос для добавления информации о медицинской истории
+app.post('/medicalHistory', (req, res) => {
+  const { Start_date, End_date, Treatment, Notes, Diagnosis_ID, Patient_ID } = req.body;
+  const sql = 'INSERT INTO Medical_history (Start_date, End_date, Treatment, Notes, Diagnosis_ID, Patient_ID) VALUES (?, ?, ?, ?, ?, ?)';
+  pool.query(sql, [Start_date, End_date, Treatment, Notes, Diagnosis_ID, Patient_ID], (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.status(201).send('Медицинская история успешно добавлена');
+  });
+});
+app.get('/medicalHistory', async (req, res) => {
+  try {
+    const sql = 'SELECT * FROM Medical_history';
+    pool.query(sql, (error, results) => {
+      if (error) {
+        console.error('Ошибка запроса: ' + error.message);
+        res.status(500).send('Ошибка сервера');
+        return;
+      }
+      res.status(200).json(results); // Отправляем данные о медицинской истории в формате JSON
+    });
+  } catch (error) {
+    console.error('Ошибка при получении медицинской истории:', error);
+    res.status(500).send('Ошибка сервера');
+  }
+});
+
 // Express маршрут для получения списка пациентов
 app.get('/patientsAll', (req, res) => {
   const sql = 'SELECT * FROM Patient';
@@ -123,6 +209,23 @@ app.get('/viewappointments', (req, res) => {
       return;
     }
     res.json(results); // Отправка результатов запроса в формате JSON
+  });
+});
+// Express маршрут для получения информации о пациенте по ID
+app.get('/patients/:id', (req, res) => {
+  const patientId = req.params.id;
+  const sql = 'SELECT * FROM Patient WHERE ID_Patient = ?';
+  pool.query(sql, [patientId], (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).send('Пациент не найден');
+      return;
+    }
+    res.json(results[0]); // Отправляем данные о пациенте в формате JSON на клиент
   });
 });
 

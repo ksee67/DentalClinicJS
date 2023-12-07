@@ -65,7 +65,7 @@
     <input type="text" id="searchPatient" placeholder="Поиск по пациентам">
     </div>
 <button class="login-button" id="addAppointmentButton" style="align-items: right; margin-left: 1130px; font-size: 24px; margin-top: 40px;">Добавить запись</button>
-<button class="button" style="align-items: right; margin-left: 990px; font-size: 24px; margin-top: 40px;">Создать пациента мед. карту</button>
+<button class="button" style="align-items: right; margin-left: 990px; font-size: 24px; margin-top: 40px;" href="../public/PatientAdd.html">Создать пациента мед. карту</button>
 <div class="container">
     <div class="left-section" style="margin-top: 130px; margin-left: 230px;">
         <div class="text2">
@@ -92,7 +92,6 @@
     <label for="doctorSelect">Выберите врача:</label>
 <select id="doctorSelect">
   <option value="">Все врачи</option>
-  <!-- Опции для выбора врачей будут добавлены здесь динамически -->
 </select>
   </div>
   <div>
@@ -114,17 +113,16 @@
         <th>Номер телефона пациента</th>
       </tr>
     </thead>
-    <tbody id="appointmentTableBody">
+    <tbody id="appointmentTableBody" style="margin-left: 350px;">
       <!-- Здесь будут данные из базы данных -->
     </tbody>
   </table>
+  <p style="color: #f3f5f9;">-</p>
+  <p style="color: #f3f5f9;">-</p>
 <p>Текст в основном контенте</p>
 <p>Текст в основном контенте</p>
 <p>Текст в основном контенте</p>
-<p>Текст в основном контенте</p>
-
 </main>
-	
 	<footer class="footer-distributed">
 			<div class="footer-left">
 				<h3>Dental<span>clinic</span></h3>
