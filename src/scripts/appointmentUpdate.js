@@ -25,4 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+  document.addEventListener('DOMContentLoaded', () => {
+    const selectedAppointmentId = localStorage.getItem('selectedAppointmentId');
+    const patientFullName = localStorage.getItem('patientFullName');
+  
+    // Далее используйте эти данные на следующей странице
+  });
   

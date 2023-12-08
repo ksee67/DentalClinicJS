@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const startDateInput = document.getElementById('startDate');
   const endDateInput = document.getElementById('endDate');
   const tableBody = document.getElementById('appointmentTableBody');
+  const patientNameInput = document.getElementById('patientName');
+  const doctorNameInput = document.getElementById('doctorName');
   let allAppointments = []; // Хранит все записи
 
   function filterAppointmentsByDate(startDate, endDate) {
@@ -69,7 +71,28 @@ document.addEventListener('DOMContentLoaded', () => {
       tableBody.appendChild(row);
     });
   }
+  function filterAppointmentsBySearch(appointments, patientName, doctorName) {
+    return appointments.filter(appointment => {
+      const patientFullName = appointment.Patient_FullName.toLowerCase();
+      const doctorFullName = `${appointment.Surname_doctor} ${appointment.Name_doctor} ${appointment.Middle_doctor}`.toLowerCase();
 
+      const matchesPatient = patientFullName.includes(patientName.toLowerCase());
+      const matchesDoctor = doctorFullName.includes(doctorName.toLowerCase());
+
+      return matchesPatient && matchesDoctor;
+    });
+  }
+
+  function handleSearchInput() {
+    const patientName = patientNameInput.value.trim();
+    const doctorName = doctorNameInput.value.trim();
+
+    const filteredAppointments = filterAppointmentsBySearch(allAppointments, patientName, doctorName);
+    displayAppointments(filteredAppointments);
+  }
+
+  patientNameInput.addEventListener('input', handleSearchInput);
+  doctorNameInput.addEventListener('input', handleSearchInput);
   function handleDateSelection() {
     const startDate = new Date(startDateInput.value);
     const endDate = new Date(endDateInput.value);

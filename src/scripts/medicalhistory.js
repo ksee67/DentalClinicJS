@@ -94,8 +94,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         Treatment: treatment,
         Notes: notes,
         Diagnosis_ID: diagnosisId,
-        Patient_ID: patientId // Добавляем ID пациента
-
+        Patient_ID: patientId 
       };
   
       try {
@@ -121,8 +120,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   window.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const patientId = params.get('id');
-    const dataWindow = document.querySelector('.data-window');
-  const table = document.createElement('table');
     try {
       const response = await fetch(`http://localhost:3001/medicalHistory?patientId=${patientId}`);
       if (!response.ok) {
@@ -139,6 +136,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   
       const tableHeader = `
         <tr>
+          <th>ID истории болезни</th>
           <th>Начало лечения</th>
           <th>Окончание лечения</th>
           <th>Назначенное лечение</th>
@@ -147,7 +145,54 @@ window.addEventListener('DOMContentLoaded', async () => {
         </tr>
       `;
       table.innerHTML += tableHeader;
-  
+      
+  // Функция для создания кнопки "Изменить"
+  function createEditButton(history) {
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Изменить';
+    editButton.classList.add('login-button', 'edit-button'); // Добавление классов "login-button" и "edit-button"
+    editButton.addEventListener('click', () => editHistory(history)); // Вызов функции при нажатии
+    return editButton;
+  }
+  function createDeleteButton(history) {
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Удалить';
+    deleteButton.classList.add('login-button', 'delete-button');
+    deleteButton.addEventListener('click', () => {
+      if (history.ID_Medical_history) {
+        deleteHistory(history); // Передача объекта history
+      } else {
+        console.error('ID записи не найден');
+      }
+    });    
+    return deleteButton;
+  }
+   // Функция для удаления записи
+   async function deleteHistory(history) {
+    const confirmDelete = confirm('Уверены, что хотите удалить запись?');
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`http://localhost:3001/medicalHistory/delete/${history.ID_Medical_history}`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) {
+          throw new Error('Ошибка при удалении записи');
+        }
+        alert('Запись успешно удалена');
+        // Перезагрузка страницы после удаления
+        location.reload();
+      } catch (error) {
+        console.error('Ошибка при удалении записи:', error);
+      }
+    }
+  }
+
+  // Функция для редактирования записи
+
+  function editHistory(history) {
+    // Реализация редактирования записи
+  }
+
       // Функция для форматирования даты в нужный вид (YYYY-MM-DD)
       function formatDate(dateString) {
         if (!dateString) return '';
@@ -177,7 +222,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (history.Patient_ID === parseInt(patientId)) {
           const row = document.createElement('tr');
           const diagnosisId = history.Diagnosis_ID;
-  
+          const editCell = document.createElement('td');
+          const deleteCell = document.createElement('td');
           try {
             const diagnosisResponse = await fetch(`http://localhost:3001/diagnosis/${diagnosisId}`);
             if (!diagnosisResponse.ok) {
@@ -186,12 +232,22 @@ window.addEventListener('DOMContentLoaded', async () => {
             const diagnosisData = await diagnosisResponse.json();
   
             row.innerHTML = `
+            <td>${history.ID_Medical_history}</td>
               <td>${formatDate(history.Start_date)}</td>
               <td>${history.End_date ? formatDate(history.End_date) : 'Не указано'}</td>
               <td>${history.Treatment}</td>
               <td>${history.Notes}</td>
               <td>${diagnosisData.Diagnosis_name}</td>
             `;
+            const editButton = createEditButton(history);
+            const deleteButton = createDeleteButton(history);
+      
+            editCell.appendChild(editButton);
+            deleteCell.appendChild(deleteButton);
+      
+            row.appendChild(editCell);
+            row.appendChild(deleteCell);
+      
             table.appendChild(row);
           } catch (error) {
             console.error('Ошибка при получении данных о диагнозе:', error);

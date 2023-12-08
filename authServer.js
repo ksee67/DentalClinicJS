@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
+app.set('appName', 'DentalClinic'); // Пример установки имени приложения в Express
 
 app.use(express.json());
 

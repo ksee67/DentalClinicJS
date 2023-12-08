@@ -2,6 +2,7 @@ const express = require('express');
 const { createPool } = require('mysql');
 const app = express();
 const port = 3001;
+app.set('appName', 'DentalClinic'); // Пример установки имени приложения в Express
 
 // Создание пула подключений к базе данных
 const pool = createPool({
@@ -66,22 +67,23 @@ app.post('/appointments', (req, res) => {
   });
 });
 // GET запрос для получения информации о медицинской истории по ID
-app.get('/medicalHistory/:id', (req, res) => {
+app.delete('/medicalHistory/delete/:id', (req, res) => {
   const medicalHistoryId = req.params.id;
-  const sql = 'SELECT * FROM Medical_history WHERE ID_Medical_history = ?';
+  const sql = 'DELETE FROM Medical_history WHERE ID_Medical_history = ?';
   pool.query(sql, [medicalHistoryId], (error, results) => {
     if (error) {
       console.error('Ошибка запроса: ' + error.message);
       res.status(500).send('Ошибка сервера');
       return;
     }
-    if (results.length === 0) {
+    if (results.affectedRows === 0) {
       res.status(404).send('Медицинская история не найдена');
       return;
     }
-    res.json(results[0]); // Отправляем данные о медицинской истории в формате JSON на клиент
+    res.status(200).send('Медицинская история успешно удалена');
   });
 });
+
 app.post('/medical-history', (req, res) => {
   const { Start_date, End_date, Treatment, Notes, Diagnosis_ID } = req.body;
   const sql = 'INSERT INTO Medical_history (Start_date, End_date, Treatment, Notes, Diagnosis_ID) VALUES (?, ?, ?, ?, ?)';
