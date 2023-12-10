@@ -82,12 +82,10 @@
     <input type="date" id="endDate">
   
     <button onclick="searchAppointments()">Поиск</button>
-    <label for="doctorSelect">Выберите врача:</label>
-<select id="doctorSelect">
-  <option value="">Все врачи</option>
-</select>
+
   </div>
   <div>
+    <button id="updateButton" class="login-button" window.location.href="../public/appointmentUpdate.html" style="margin-left: 0px;">Изменить запись на прием</button>   
     <label for="patientName">Поиск по ФИО пациента:</label>
 <input type="text" id="patientName" placeholder="Введите ФИО пациента">
 
@@ -110,6 +108,7 @@
       <!-- Здесь будут данные из базы данных -->
     </tbody>
   </table>
+
   <p style="color: #f3f5f9;">-</p>
   <p style="color: #f3f5f9;">-</p>
 <p>Текст в основном контенте</p>

@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const editCell = document.createElement('td');
       const editButton = document.createElement('button');
       editButton.textContent = 'Редактировать';
-      editButton.addEventListener('click', () => editAppointment(appointment)); // Функция editAppointment вызывается при нажатии кнопки
+      editButton.addEventListener('click', () => editAppointment(appointment, patientFullNameCell, doctorFullNameCell));
       editCell.appendChild(editButton);
       row.appendChild(editCell);
   
@@ -100,14 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const filteredAppointments = filterAppointmentsByDate(startDate, endDate);
     displayAppointments(filteredAppointments);
   }
-  function editAppointment(appointment) {
+  function editAppointment(appointment, patientFullNameCell, doctorFullNameCell) {
     const appointmentId = appointment.ID_AppointmentSchedule;
+    const dateOfAppointment = appointment.Date_of_Appointment;
+    const doctorFullName = doctorFullNameCell.textContent;
+    const patientFullName = patientFullNameCell.textContent;
+    
     localStorage.setItem('selectedAppointmentId', appointmentId);
-    const url = `AppointmentDetail.html?id=${appointmentId}`;
-    window.location.href = `${url}?id=${appointmentId}`;
+    const url = `AppointmentDetail.html?id=${appointmentId}&startDate=${dateOfAppointment}&endDate=${dateOfAppointment}&doctorName=${encodeURIComponent(doctorFullName)}&patientName=${encodeURIComponent(patientFullName)}`;
+    window.location.href = url;
   }
   
-  
+    
   startDateInput.addEventListener('change', handleDateSelection);
   endDateInput.addEventListener('change', handleDateSelection);
 
@@ -124,4 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
       displayAppointments(allAppointments);
     })
     .catch(error => console.error('Ошибка получения данных:', error));
+});
+// Получение кнопки по ее ID
+const updateButton = document.getElementById('updateButton');
+
+// Добавление обработчика события click
+updateButton.addEventListener('click', function() {
+  // Перенаправление на другую страницу
+  window.location.href = '../public/appointmentUpdate.html'; // Путь к вашей странице appointmentUpdate.html
 });

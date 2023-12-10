@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../public/images/logo.png" />
+    <link rel="stylesheet" href="../src/styles/indexPage.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<title>Dental Clinic</title>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-content">
+			<img src="../public/images/logo.png" alt="Логотип" class="logo">
+			<h3 class="clinic-name">Dental<span>clinic</span></h3>
+			<div class="tabs">
+                <div class="tab"><a href="../public/index.html" style="text-decoration: none; color: black;">Главная</a></div>
+                <div class="tab"><a href="../public/SecondPage.html" style="text-decoration: none; color: black;">Каталог услуг</a></div>
+                <div class="tab"><a href="../public/AppointmentPage.html" style="text-decoration: none; color: black;">Запись на прием</a></div>
+                <div class="tab active">Пациенты</div>
+                <div class="tab"><a href="../public/Payment.html" style="text-decoration: none; color: black;">Платёж</a></div>
+			</div>
+            <button class="login-button">Войти</button>
+        </div>
+    </header>
+    <main class="main">
+        <div class="catalog" style="size: 5px;" >
+          <a href="../public/AllPatients.html" style="font-size: 20px;">Пациенты в клинике</a>
+          <span style="font-size: 20px;">←</span>
+          <a href="../public/MedicalHistory.html" style="font-size: 20px;" onclick="saveCurrentPage()">История болезни пациента</a>
+          <span style="font-size: 20px;">←</span>
+          <a href="../public/MedicalHistoryEdit.html" style="font-size: 20px;">Изменение данных</a>
+          
+          <script>
+            function saveCurrentPage() {
+              sessionStorage.setItem('previousPage', window.location.href);
+            }
+          </script>
+        </div>
+        <h1 style="color: #3167d9;">Изменение данных пациента ✍</h1>
+
+          <div class="left-section" style="margin-left: 80px; margin-top: 30px;">
+            <label for="patient">Пациент:</label>
+            <select id="patient" name="patient">
+              <!-- Опции для комбобокса Patient  disabled-->
+            </select>     
+        
+            <label for="start_date">Дата начала лечения:</label>
+            <input type="date" id="start_date" name="start_date">
+            
+            <label for="end_date">Дата окончания лечения:</label>
+            <input type="date" id="end_date" name="end_date">
+            
+            <label for="treatment">Лечение:</label>
+            <textarea style="border-color: #3167D9;" id="treatment" name="treatment" rows="4" cols="50"></textarea>
+            
+            <label for="notes">Заметки:</label>
+            <textarea style="border-color: #3167D9;" id="notes" name="notes" rows="4" cols="50"></textarea>
+            <div сlass="conteiner" style="margin-top: 15px;">
+
+            <label for="diagnosis">Диагноз:</label>
+            <select id="diagnosis" name="diagnosis">
+              <!-- Опции для комбобокса Diagnosis_ID -->
+            </select>
+            <label  for="searchDiagnosis">Поиск по диагнозу:</label>
+            <input type="text" id="searchDiagnosis" placeholder="Поиск по диагнозу">
+          </div>
+          <div style="margin-top: 10px;">
+            <button id="updateButton" class="login-button" style="margin-left: 0px;">Изменить</button>   
+            <button class="button" id="refreshButton">&#10227;</button>
+          </div>
+
+          </div>
+
+        <p style="color: #f3f5f9;">-</p>
+        <p style="color: #f3f5f9;">-</p>
+        <p style="color: #f3f5f9;">-</p>
+
+		<p>njkn</p>
+		<p>njkn</p>
+      </main>
+      
+	
+	<footer class="footer-distributed">
+			<div class="footer-left">
+				<h3>Dental<span>clinic</span></h3>
+				<p class="footer-links">
+					<a href="../public/index.html" class="link-1">Главная</a>
+					
+					<a href="../SecondPage/index.html">Каталог услуг</a>
+				
+					<a href="#">Запись на приём</a>
+				
+					<a href="#">Пациенты</a>
+					
+					<a href="#">Платёж</a>
+				
+				</p>
+				<p class="footer-company-name">Dental Clinic © 2023 - Все права защищены</p>
+			</div>
+			<div class="footer-center">
+				<div>
+					<i class="fa fa-map-marker"></i>
+					<p><span>ул. Калинина, д.15, к.1</span> м. Авиамоторная, Москва</p>
+				</div>
+				<div>
+					<i class="fa fa-phone"></i>
+					<p>+7(927)232-23-44</p>
+				</div>
+				<div>
+					<i class="fa fa-envelope"></i>
+					<p><a href="mailto:support@company.com">dental@mail.com</a></p>
+				</div>
+			</div>
+
+			<div class="footer-right">
+
+				<p class="footer-company-about">
+					<span>О нас</span>
+					Наши стоматологи предоставляют высококачественные услуги для создания здоровой и красивой улыбки с индивидуальным подходом к каждому пациенту.				</p>
+
+				<div class="footer-icons">
+					<a href="#"><i class="fa fa-facebook"></i></a>
+					<a href="#"><i class="fa fa-twitter"></i></a>
+					<a href="#"><i class="fa fa-linkedin"></i></a>
+					<a href="#"><i class="fa fa-github"></i></a>
+
+				</div>
+			</div>
+		</footer>
+    <script src="../src/scripts/medicalhistory.js"></script>
+    <script src="../src/scripts/medicalHistoryEdit.js"></script>
+</body>
+</html>

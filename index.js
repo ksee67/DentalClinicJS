@@ -3,6 +3,9 @@ const { createPool } = require('mysql');
 const app = express();
 const port = 3001;
 app.set('appName', 'DentalClinic'); // Пример установки имени приложения в Express
+const multer = require('multer');
+const XLSX = require('xlsx');
+const upload = multer({ dest: 'uploads/' }); // Папка для сохранения загруженных файлов
 
 // Создание пула подключений к базе данных
 const pool = createPool({
@@ -11,6 +14,34 @@ const pool = createPool({
   password: "1234",
   database: "DentalClinic",
 });
+app.post('/import-medical-history', upload.single('file'), (req, res) => {
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).send('Файл не был загружен');
+  }
+
+  const workbook = XLSX.readFile(file.path);
+  const sheetName = workbook.SheetNames[0]; // Предполагаем, что данные находятся на первом листе
+  const worksheet = workbook.Sheets[sheetName];
+  const excelData = XLSX.utils.sheet_to_json(worksheet);
+
+  // Проход по данным из Excel и выполнение запроса на добавление в базу данных
+  excelData.forEach(data => {
+    const { Start_date, End_date, Treatment, Notes, Diagnosis_ID } = data;
+    const sql = 'INSERT INTO Medical_history (Start_date, End_date, Treatment, Notes, Diagnosis_ID) VALUES (?, ?, ?, ?, ?)';
+    pool.query(sql, [Start_date, End_date, Treatment, Notes, Diagnosis_ID], (error, results) => {
+      if (error) {
+        console.error('Ошибка запроса: ' + error.message);
+        return;
+      }
+      console.log('Запись успешно добавлена');
+    });
+  });
+
+  res.status(200).send('Данные успешно импортированы');
+});
+
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -22,12 +53,11 @@ app.use((req, res, next) => {
 app.post('/payments', (req, res) => {
   const paymentData = req.body; // Данные из POST-запроса
 
-  const sql = `INSERT INTO Payment (Date_payment, Amount, Service_ID, Registrar_ID, Patient_ID) 
-               VALUES (?, ?, ?, ?, ?)`;
+  const sql = `INSERT INTO Payment (Date_payment, Service_ID, Registrar_ID, Patient_ID) 
+               VALUES (?, ?, ?, ?)`;
   
   const values = [
     paymentData.Date_payment,
-    paymentData.Amount,
     paymentData.Service_ID,
     paymentData.Registrar_ID,
     paymentData.Patient_ID
@@ -83,7 +113,7 @@ app.delete('/medicalHistory/delete/:id', (req, res) => {
     res.status(200).send('Медицинская история успешно удалена');
   });
 });
-
+// доабвление мед . истории
 app.post('/medical-history', (req, res) => {
   const { Start_date, End_date, Treatment, Notes, Diagnosis_ID } = req.body;
   const sql = 'INSERT INTO Medical_history (Start_date, End_date, Treatment, Notes, Diagnosis_ID) VALUES (?, ?, ?, ?, ?)';
@@ -96,6 +126,22 @@ app.post('/medical-history', (req, res) => {
     res.status(201).send('Запись успешно добавлена');
   });
 });
+// изменение мед. истории
+app.put('/medicalhistory/:id', (req, res) => {
+  const { id } = req.params;
+  const { Start_date, End_date, Treatment, Notes, Diagnosis_ID } = req.body; // Removed Patient_ID from here
+  const sql = 'UPDATE Medical_history SET Start_date = ?, End_date = ?, Treatment = ?, Notes = ?, Diagnosis_ID = ? WHERE ID_Medical_history = ?';
+  pool.query(sql, [Start_date, End_date, Treatment, Notes, Diagnosis_ID, id], (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.status(200).send('Запись успешно обновлена');
+  });
+});
+
+
 
 // GET запрос для добавления нового диагноза
 app.get('/diagnosis', (req, res) => {
@@ -191,7 +237,7 @@ app.get('/viewappointments', (req, res) => {
       CONCAT(p.Surname_patient, ' ', p.Name_patient, ' ', COALESCE(p.Middle_patient, '')) AS Patient_FullName,
       p.Phone_number AS Patient_Phone
     FROM 
-      AppointmentSchedule a
+    AppointmentSchedule a
     INNER JOIN 
       Doctor d ON a.Doctor_ID = d.ID_Doctor
     INNER JOIN 
@@ -213,6 +259,69 @@ app.get('/viewappointments', (req, res) => {
     res.json(results); // Отправка результатов запроса в формате JSON
   });
 });
+// Получение списка ролей
+app.get('/roles', (req, res) => {
+  const query = 'SELECT DISTINCT PostName AS Role FROM FullUserData'; // Запрос для получения уникальных ролей
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Ошибка получения данных о ролях' });
+      throw error;
+    }
+    
+    // Отправляем данные в формате JSON в ответ на запрос
+    res.json(results);
+  });
+});
+app.put('/user/:userId/role/:roleId', (req, res) => {
+  const { userId, roleId } = req.params;
+
+  // Предположим, что у каждого типа пользователя есть своя таблица: Administrator, Doctor, Registrar
+  // Ниже представлен пример кода для обновления роли у пользователя с указанным userId в соответствующей таблице
+
+  if (roleId === 'administratorRoleId') {
+     const updateQuery = 'UPDATE Administrator SET Post_ID = ? WHERE ID_Administrator = ?';
+  } else if (roleId === 'doctorRoleId') {
+     const updateQuery = 'UPDATE Doctor SET Post_ID = ? WHERE ID_Doctor = ?';
+  } else if (roleId === 'registrarRoleId') {
+    const updateQuery = 'UPDATE Registrar SET Post_ID = ? WHERE ID_Registrar = ?';
+  } else {
+    res.status(400).json({ error: 'Неверный ID роли' });
+    return;
+  }
+
+  // Выполнение запроса к базе данных с updateQuery для обновления роли у пользователя с userId
+
+  res.status(200).json({ message: `Роль пользователя с ID ${userId} изменена на ${roleId}` });
+});
+
+// Получение списка всех пользователей
+app.get('/users', (req, res) => {
+  const query = `
+    SELECT 
+      CONCAT(Administrator_FullName) AS FullName 
+    FROM FullUserData
+    UNION
+    SELECT 
+      CONCAT(Doctor_FullName) AS FullName 
+    FROM FullUserData
+    UNION
+    SELECT 
+      CONCAT(Registrar_FullName) AS FullName 
+    FROM FullUserData
+  `;
+  
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Ошибка получения данных о пользователях' });
+      throw error;
+    }
+    
+    // Отправляем данные в формате JSON в ответ на запрос
+    res.json(results);
+  });
+});
+
+
 // Express маршрут для получения информации о пациенте по ID
 app.get('/patients/:id', (req, res) => {
   const patientId = req.params.id;

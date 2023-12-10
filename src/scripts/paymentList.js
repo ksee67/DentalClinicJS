@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', async () => {
           (dateFilter === '' || new Date(payment.Date_payment).toLocaleDateString() === new Date(dateFilter).toLocaleDateString())
         ) {
           const div = document.createElement('div');
-          div.textContent = `Пациент: ${patient?.FullName}, Дата и время: ${new Date(payment.Date_payment).toLocaleString()}, Сумма: $${payment.Amount}, Регистратор: ${registrar?.FullName}`;
+          div.textContent = `Пациент: ${patient?.FullName}, Дата и время: ${new Date(payment.Date_payment).toLocaleString()},  Регистратор: ${registrar?.FullName}`;
   
           const printButton = document.createElement('button');
           printButton.textContent = 'Распечатать чек';

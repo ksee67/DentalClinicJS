@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../public/images/logo.png" />
+    <link rel="stylesheet" href="../src/styles/indexPage.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<title>Dental Clinic</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+			<img src="../public/images/logo.png" alt="Логотип" class="logo">
+			<h3 class="clinic-name">Dental<span>clinic</span></h3>
+			<div class="tabs">
+                <div class="tab"><a href="../public/ClinicIncome.html" style="text-decoration: none; color: black;">Доход клиники</a></div>
+                <div class="tab"><a href="../public/AdminPanel.html" style="text-decoration: none; color: black;">Личный кабинет</a></div>
+                <div class="tab"><a href="../public/AdminRole.html" style="text-decoration: none; color: black;">Управление ролями</a></div>
+                <div class="tab active"><a  style="text-decoration: none; color: black;">Регистрация сотрудников</a></div>
+			</div>
+            <button class="login-button">Выход</button>
+        </div>
+    </header>
+	<main class="main">
+        <div class="container">
+          <div class="left-section" style="margin-left: 0px; margin-top: 0px;">
+            <h1 style="color: #3167D9;margin-right: 420px;">Регистрация сотрудников в системе
+            </h1>
+            <form id="userForm">
+                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                  <label for="name" style="font-size: 26px; margin-left: 10px;">Имя:</label>
+                  <input type="text" id="name" name="name" required maxlength="30">
+                </div>
+                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                  <label for="surname" style="font-size: 26px; margin-left: 10px;">Фамилия:</label>
+                  <input type="text" id="surname" name="surname" required maxlength="30">
+                </div>
+                <div class="input-section" style="margin-left: 30px; margin-top: 20px;">
+                  <label for="middleName" style="font-size: 26px; margin-left: 10px;">Отчество:</label>
+                  <input type="text" id="middleName" name="middleName" maxlength="30">
+                </div>
+                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                  <label for="password" style="font-size: 26px; margin-left: 10px;">Пароль:</label>
+                  <input type="password" style="font-size: 26px;" id="password" name="password" required maxlength="30">
+                </div>
+                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                  <label for="login" style="font-size: 26px; margin-left: 10px;">Логин:</label>
+                  <input type="text" id="login" name="login" required maxlength="30">
+                </div>
+                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                  <label for="email" style="font-size: 26px; margin-left: 10px; margin-top: 20px;">Email:</label>
+                  <input type="email" style="font-size: 26px;"  id="email" name="email" required maxlength="50">
+                </div>
+                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                  <label for="postID" style="font-size: 26px; margin-left: 10px;">Должность:</label>
+                  <select id="postID" name="postID" required>
+                    <!-- Опции для выбора должности -->
+                  </select>
+                </div>
+                <button  class="login-button" style="margin-left: 0px;" type="submit">Создать пользователя</button>
+              </form>
+		
+			
+
+			</div>
+
+	</div>
+</div>
+</div>
+<p style="color: #f3f5f9;">-</p>
+<p style="color: #f3f5f9;">-</p>
+<p style="color: #f3f5f9;">-</p>
+<p style="color: #f3f5f9;">-</p>
+<p style="color: #f3f5f9;">-</p>
+<p style="color: #f3f5f9;">-</p>
+<p style="color: #f3f5f9;">-</p>
+
+    </main>
+	
+	<footer class="footer-distributed">
+			<div class="footer-left">
+				<h3>Dental<span>clinic</span></h3>
+				<p class="footer-links">
+					<a href="../public/index.html" class="link-1">Главная</a>			
+					<a href="../SecondPage/index.html">Каталог услуг</a>	
+					<a href="#">Запись на приём</a>			
+					<a href="#">Пациенты</a>				
+					<a href="#">Платёж</a>			
+				</p>
+				<p class="footer-company-name">Dental Clinic © 2023 - Все права защищены</p>
+			</div>
+			<div class="footer-center">
+				<div>
+					<i class="fa fa-map-marker"></i>
+					<p><span>ул. Калинина, д.15, к.1</span> м. Авиамоторная, Москва</p>
+				</div>
+				<div>
+					<i class="fa fa-phone"></i>
+					<p>+7(927)232-23-44</p>
+				</div>
+				<div>
+					<i class="fa fa-envelope"></i>
+					<p><a href="mailto:support@company.com">dental@mail.com</a></p>
+				</div>
+			</div>
+			<div class="footer-right">
+				<p class="footer-company-about">
+					<span>О нас</span>
+					Наши стоматологи предоставляют высококачественные услуги для создания здоровой и красивой улыбки с индивидуальным подходом к каждому пациенту.				</p>
+
+				<div class="footer-icons">
+					<a href="#"><i class="fa fa-facebook"></i></a>
+					<a href="#"><i class="fa fa-twitter"></i></a>
+					<a href="#"><i class="fa fa-linkedin"></i></a>
+					<a href="#"><i class="fa fa-github"></i></a>
+
+				</div>
+			</div>
+		</footer>
+		<script src="../src/scripts/adminReg.js"></script>
+</body>
+</html>

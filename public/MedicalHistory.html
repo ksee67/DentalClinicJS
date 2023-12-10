@@ -44,37 +44,47 @@
             <input type="date" id="end_date" name="end_date">
             
             <label for="treatment">Лечение:</label>
-            <textarea id="treatment" name="treatment" rows="4" cols="50"></textarea>
+            <textarea style="border-color: #3167D9;" id="treatment" name="treatment" rows="4" cols="50"></textarea>
             
             <label for="notes">Заметки:</label>
-            <textarea id="notes" name="notes" rows="4" cols="50"></textarea>
+            <textarea style="border-color: #3167D9;" id="notes" name="notes" rows="4" cols="50"></textarea>
             <label for="diagnosis">Диагноз:</label>
-          <div сlass="conteiner">
+            <div сlass="conteiner">
             <select id="diagnosis" name="diagnosis">
               <!-- Опции для комбобокса Diagnosis_ID -->
             </select>
             <label for="searchDiagnosis">Поиск по диагнозу:</label>
             <input type="text" id="searchDiagnosis" placeholder="Поиск по диагнозу">
           </div>
-          
+          <div>
             <button id="addButton" class="login-button" style="margin-left: 0px;">Добавить</button>   
-      
+            <button class="button" id="refreshButton">&#10227;</button>
           </div>
-          <button id="refreshButton">&#10227;</button>
+          <h1>Загрузка данных из Excel</h1>
+          <input type="file" id="excelFile" accept=".xlsx, .xls">
+          <button id="uploadButton">Загрузить</button>
+          </div>
 
- <div class="left-section" style="margin-left: 80px; margin-top: 120px;">
-    <!-- Ваши поля ввода -->
-</div>
-<div class="text3" style="size: 55px;">
-  История болезней
-</div>
+        <h1 style="size: 55px; margin-top: 15px; color: #3167D9;">
+             История болезней
+        </h1>
 <div class="data-window" contenteditable="true">
     <!-- Здесь будет отображаться информация о пациенте -->
 </div>
         <p style="color: #f3f5f9;">-</p>
         <p style="color: #f3f5f9;">-</p>
         <p style="color: #f3f5f9;">-</p>
-
+        <script>
+          window.onload = function() {
+            const previousPage = sessionStorage.getItem('previousPage');
+            if (previousPage) {
+              sessionStorage.removeItem('previousPage');
+              window.location.href = previousPage;
+            }
+          };
+        </script>
+        
+        
 		<p>njkn</p>
 		<p>njkn</p>
       </main>
@@ -127,6 +137,7 @@
 				</div>
 			</div>
 		</footer>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.0/dist/xlsx.full.min.js"></script>
     <script src="../src/scripts/patientView.js"></script>
     <script src="../src/scripts/patientAdd.js"></script>
     <script src="../src/scripts/medicalhistory.js"></script>

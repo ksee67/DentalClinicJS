@@ -46,18 +46,15 @@
                 <!-- Выбор услуги -->
                 <div class="service-container" id="additionalServiceContainer">
                     <label style="margin-top: 10px;"  >Выберите услугу:</label>
-                    <select style="width: 500px;margin-right: 50px; margin-top: 40px;" id="serviceSelect1" name="serviceSelect" class="select-with-search">
+                    <select style="width: 500px;margin-right: 50px; margin-top: 40px; height: 10px;	border-color:#3167D9;" id="serviceSelect1" name="serviceSelect" class="select-with-search">
                     </select>
                 
-                    <button type="button" class="login-button" onclick="addServiceSelect()">+</button>
+                  <!--    <button type="button" class="login-button" onclick="addServiceSelect()">+</button>-->
                   </div>
-              <div>
-                      <label for="amount">Сумма платежа:</label>
-                  <input type="text" id="amount" name="amount" placeholder="Цена" required> 
-                </div>
+             
               
-                <div>
-                  <label for="paymentDate">Дата и время платежа:</label>
+                <div style="margin-top: 10px;" >
+                  <label style="margin-top: 10px;" for="paymentDate">Дата и время платежа:</label>
                   <input type="datetime-local" id="paymentDate" name="paymentDate">
                 </div>
               

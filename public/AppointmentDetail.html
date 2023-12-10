@@ -28,13 +28,13 @@
     </header>
     <main class="main" >
         <div class="container">
-            <div class="left-section" style="margin-top: 130px; margin-left: 230px;">
+            <div class="left-section" style="margin-top: 130px; margin-left: 0px;">
                 <div class="text2">
                     Доступные записи на приём ☎
                 </div>
                 <div id="modal" class="modal">
                     <div class="modal-content">
-                      <h2>Изменение и удаление записи</h2>
+                      <h2 style="color: #3167D9;">Изменение и удаление записи</h2>
                       <div class="input-section" style="margin-left: 30px;">
                         <label for="doctor" style="font-size: 26px; margin-left: 10px;">Врач:</label>
                         <select id="doctor"style="font-size: 26px; margin-bottom: 50px; margin-top: 20px;"></select>
@@ -45,8 +45,12 @@
                         </select>
                     </div>
                     <div class="input-section" style="margin-left: 30px;">
+                      <label for="searchPatient" style="font-size: 26px; margin-left: 10px;">Пациент:</label>
+                      <select  style="font-size: 26px; margin-left: 10px;" id="patient">  </select>
+                      </div>
+                    <div class="input-section" style="margin-left: 30px;">
                         <label for="day" style="font-size: 26px; margin-left: 10px;">Выберите день недели:</label>
-                  <input type="date" id="selectedDate" style="font-size: 26px; margin-bottom: 50px; margin-top: 20px;" onchange="checkForSunday()">
+                  <input type="date" id="selectedDate" style="font-size: 26px; margin-bottom: 50px; margin-top: 10px;" onchange="checkForSunday()">
                 </div>
     
                   <div class="input-section" style="margin-left: 30px;">
@@ -55,14 +59,10 @@
                         <select id="time" style="font-size: 26px; margin-bottom: 50px; margin-top: 20px;"></select>
                       </div>
                  </div>
-                 <div class="input-section" style="margin-left: 30px;">
-                    <label for="searchPatient" style="font-size: 26px; margin-left: 10px;">Поиск пациента:</label>
-                    <select id="patient">  </select>
-                    <input type="text" id="searchPatient" placeholder="Поиск по пациентам">
-                    </div>
+              
                         <div class="btn-group">
-                          <button type="submit" id="editSubmit">Изменить</button>
-                          <button type="button" id="deleteSubmit">Удалить</button>
+                          <button type="submit" class="login-button" id="editSubmit">Изменить</button>
+                          <button type="button"  class="login-button"  id="deleteSubmit">Удалить</button>
                         </div>
                       </form>
                     </div>

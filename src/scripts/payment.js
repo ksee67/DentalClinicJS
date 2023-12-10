@@ -46,7 +46,6 @@ async function loadServices() {
     }
     const serviceData = await serviceResponse.json();
     const serviceSelect = document.getElementById('serviceSelect1');
-    const amountInput = document.getElementById('amount');
 
     serviceData.forEach(service => {
       const option = document.createElement('option');
@@ -91,7 +90,6 @@ window.addEventListener('load', () => {
 
     const paymentData = {
       Date_payment: formData.get('paymentDate'),
-      Amount: formData.get('amount'),
       Service_ID: formData.get('serviceSelect'),
       Registrar_ID: formData.get('registrationEmployee'),
       Patient_ID: formData.get('patientSelect')
@@ -107,28 +105,21 @@ window.addEventListener('load', () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to add payment');
+        throw new Error('Ошибка добавления оплаты');
       }
 
       document.getElementById('paymentForm').reset();
       
-   // Всплывающее сообщение
-   const successMessage = document.createElement('div');
-   successMessage.textContent = 'Payment added successfully';
-   successMessage.classList.add('success-message');
-   document.body.appendChild(successMessage);
-   
-   // Удалить сообщение через 3 секунды
-   setTimeout(() => {
-     successMessage.remove();
-   }, 3000);
-   
-   console.log('Payment added successfully');
- } catch (error) {
-   console.error('Error adding payment:', error);
- }
+      // Показываем alert об успешном добавлении платежа
+      alert('Оплата прошла успешно!');
+      
+      console.log('Оплата прошла успешно!');
+    } catch (error) {
+      console.error('ОШибка оплаты:', error);
+    }
+  });
 });
-});
+
 // Получаем кнопку обновления
 const refreshButton = document.getElementById('refreshButton');
 
