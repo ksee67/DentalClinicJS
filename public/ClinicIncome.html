@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" href="../public/images/logo.png" />
     <link rel="stylesheet" href="../src/styles/indexPage.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<title>Dental Clinic</title>
 </head>
 <body>
@@ -25,15 +25,42 @@
     </header>
 	<main class="main">
         <div class="container">
+			
           <div class="left-section" style="margin-left: 0px; margin-top: 0px;">
+			
             <h1 style="color: #3167D9;margin-right: 220px;">Статистика дохода клиники по датам
             </h1>
             <h3 style="color: #3167D9;margin-right: 220px;">Табличный вид:
             </h3>
+			<div id="tableContainer" style="height: 300px; overflow-y: auto;width: 1000px;">
+				<table id="paymentsTable" border="1"></table>
+			  </div>
             <div id="paymentsTable"></div>
             <h3 style="color: #3167D9;margin-right: 220px;">Даграммный вид:
             </h3>
-			  <button id="diagramButton" class="login-button" style="margin-left: 0px;">Создать диаграмму</button>   
+			
+			<div>
+				<!--	<label for="date" style="font-size: 20px; margin-left: 0;">По дате: с</label>
+			<input type="date" id="startDatePicker" />
+			<label for="date" style="font-size: 20px; margin-left: 0;">по</label>
+			<input type="date" id="endDatePicker" /> !-->
+			<label for="role" style="font-size: 20px; margin-left: 10;">Сгенерировать:</label>
+			<button id="monthlyButton" class="button" style="margin-top: 15px; margin-left: 0;">За последний месяц</button>
+			<button id="weeklyButton" class="button" style="margin-top: 15px; margin-left: 0;">За последнюю неделю</button>
+			<button id="yearlyButton" class="button" style="margin-top: 15px; margin-left: 0;">За год</button>
+			<div>
+			<!--	<label for="registrarSelect" style="font-size: 20px;">Выберите регистратора:</label>
+			<select id="registrarSelect" style="font-size: 16px;">
+					<option value="all">Все регистраторы</option>
+				  </select>
+			</select>
+		<button id="sortByPriceButton">Вывод по ценам</button>!-->
+
+			
+
+		</div>
+				<!--		  <button  id="diagramButton" class="login-button" style="margin-top: 15px; margin-left: 0;">Создать диаграмму</button>   !-->
+			  <canvas id="paymentChart" width="200" height="100"></canvas>
 
 	</div>
 </div>

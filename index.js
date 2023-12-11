@@ -427,11 +427,9 @@ app.put('/appointments/:id', (req, res) => {
     res.send('Запись обновлена успешно');
   });
 });
-
-
-// Получение платежей
-app.get('/payments', (req, res) => {
-  const sql = 'SELECT * FROM Payment';
+// Получение платежей с разнецей
+app.get('/paymentss', (req, res) => {
+  const sql = "SELECT p.ID_Payment, p.Date_payment, s.Service_name, s.Price, CONCAT(r.Surname_registr, ' ', r.Name_registr, ' ', COALESCE(r.Middle_registr, '')) AS Registrar_name,  CONCAT(pat.Surname_patient, ' ', pat.Name_patient, ' ', COALESCE(pat.Middle_patient, '')) AS Patient_name  FROM Payment p  JOIN service s ON p.Service_ID = s.service_id  JOIN Registrar r ON p.Registrar_ID = r.ID_Registrar JOIN Patient pat ON p.Patient_ID = pat.ID_Patient WHERE p.Date_payment BETWEEN 'startDate' AND 'endDate'";
   pool.query(sql, (error, results) => {
     if (error) {
       res.status(500).json(error);
@@ -441,6 +439,28 @@ app.get('/payments', (req, res) => {
   });
 });
 
+// Получение платежей
+app.get('/payments1', (req, res) => {
+  const sql = "SELECT p.ID_Payment, p.Date_payment, s.Service_name, s.Price, CONCAT(r.Surname_registr, ' ', r.Name_registr, ' ', COALESCE(r.Middle_registr, '')) AS Registrar_name,  CONCAT(pat.Surname_patient, ' ', pat.Name_patient, ' ', COALESCE(pat.Middle_patient, '')) AS Patient_name  FROM Payment p  JOIN service s ON p.Service_ID = s.service_id  JOIN Registrar r ON p.Registrar_ID = r.ID_Registrar JOIN Patient pat ON p.Patient_ID = pat.ID_Patient;"
+  pool.query(sql, (error, results) => {
+    if (error) {
+      res.status(500).json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+// Получение платежей
+app.get('/payments', (req, res) => {
+  const sql = "SELECT * FROM Payment;"
+  pool.query(sql, (error, results) => {
+    if (error) {
+      res.status(500).json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 // Получение регистраторов
 app.get('/registrars', (req, res) => {
   const sql = 'SELECT ID_Registrar, CONCAT(Surname_registr, " ", Name_registr, " ", Middle_registr) AS FullName FROM Registrar';
