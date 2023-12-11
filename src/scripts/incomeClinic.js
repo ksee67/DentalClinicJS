@@ -148,7 +148,7 @@ function generateStatistics(startDate = null, endDate = null) {
     .catch(error => console.error('Ошибка получения данных о платежах:', error));
 }
 
-// Обработчик события  за год"
+// Обработчик события  за год
 document.getElementById('yearlyButton').addEventListener('click', () => {
   const currentDate = new Date();
   const endDate = new Date(); // Сегодняшняя дата

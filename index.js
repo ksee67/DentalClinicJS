@@ -22,24 +22,33 @@ app.post('/import-medical-history', upload.single('file'), (req, res) => {
   }
 
   const workbook = XLSX.readFile(file.path);
-  const sheetName = workbook.SheetNames[0]; // Предполагаем, что данные находятся на первом листе
+  const sheetName = workbook.SheetNames[0]; 
   const worksheet = workbook.Sheets[sheetName];
   const excelData = XLSX.utils.sheet_to_json(worksheet);
 
-  // Проход по данным из Excel и выполнение запроса на добавление в базу данных
-  excelData.forEach(data => {
-    const { Start_date, End_date, Treatment, Notes, Diagnosis_ID } = data;
-    const sql = 'INSERT INTO Medical_history (Start_date, End_date, Treatment, Notes, Diagnosis_ID) VALUES (?, ?, ?, ?, ?)';
-    pool.query(sql, [Start_date, End_date, Treatment, Notes, Diagnosis_ID], (error, results) => {
-      if (error) {
-        console.error('Ошибка запроса: ' + error.message);
-        return;
-      }
-      console.log('Запись успешно добавлена');
+  const promises = excelData.map(data => {
+    return new Promise((resolve, reject) => {
+      const { Start_date, End_date, Treatment, Notes, Diagnosis_ID, Patient_ID } = data;
+      const sql = 'INSERT INTO Medical_history (Start_date, End_date, Treatment, Notes, Diagnosis_ID, Patient_ID) VALUES (?, ?, ?, ?, ?, ?)';
+      pool.query(sql, [Start_date, End_date, Treatment, Notes, Diagnosis_ID,Patient_ID], (error, results) => {
+        if (error) {
+          console.error('Ошибка запроса: ' + error.message);
+          reject(error);
+          return;
+        }
+        console.log('Запись успешно добавлена');
+        resolve(results);
+      });
     });
   });
 
-  res.status(200).send('Данные успешно импортированы');
+  Promise.all(promises)
+    .then(() => {
+      res.status(200).json({ message: 'Все записи успешно добавлены' });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'Произошла ошибка при добавлении записей' });
+    });
 });
 
 
@@ -275,9 +284,6 @@ app.get('/roles', (req, res) => {
 app.put('/user/:userId/role/:roleId', (req, res) => {
   const { userId, roleId } = req.params;
 
-  // Предположим, что у каждого типа пользователя есть своя таблица: Administrator, Doctor, Registrar
-  // Ниже представлен пример кода для обновления роли у пользователя с указанным userId в соответствующей таблице
-
   if (roleId === 'administratorRoleId') {
      const updateQuery = 'UPDATE Administrator SET Post_ID = ? WHERE ID_Administrator = ?';
   } else if (roleId === 'doctorRoleId') {
@@ -288,8 +294,6 @@ app.put('/user/:userId/role/:roleId', (req, res) => {
     res.status(400).json({ error: 'Неверный ID роли' });
     return;
   }
-
-  // Выполнение запроса к базе данных с updateQuery для обновления роли у пользователя с userId
 
   res.status(200).json({ message: `Роль пользователя с ID ${userId} изменена на ${roleId}` });
 });

@@ -92,21 +92,32 @@ searchInput.addEventListener('input', (event) => {
       .catch(error => console.error('Ошибка получения пользователей:', error));
   });
   document.getElementById('updateButton').addEventListener('click', () => {
-    const selectedUser = document.getElementById('user').value;
-    const selectedRole = document.getElementById('role').value;
-  
-    if (selectedUser && selectedRole) {
-      // Отправка PUT-запроса на сервер для обновления роли у выбранного пользователя
-      fetch(`http://localhost:3001/user/${selectedUser}/role/${selectedRole}`, {
+    const selectedUserId = document.getElementById('user').value; // Получение выбранного пользователя из комбобокса
+    const selectedRoleId = document.getElementById('role').value; // Получение выбранной роли из комбобокса
+    const selectedPostId = document.getElementById('postSelect').value; // Получение выбранного внешнего ключа поста из комбобокса
+    
+    console.log('selectedUserId:', selectedUserId);
+    console.log('selectedRoleId:', selectedRoleId);
+    console.log('selectedPostId:', selectedPostId);
+    
+    if (selectedUserId && selectedRoleId && selectedPostId) {
+      // отправка PUT запроса на сервер для обновления роли у выбранного пользователя
+      fetch(`http://localhost:3001/user/${selectedUserId}/role/${selectedRoleId}`, {
         method: 'PUT',
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data.message); // Отображение сообщения об успешном обновлении роли
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          postId: selectedPostId // Передача выбранного внешнего ключа поста
         })
-        .catch(error => console.error('Ошибка обновления роли:', error));
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.message);
+      })
+      .catch(error => console.error('Ошибка обновления роли:', error));
     } else {
-      console.error('Пожалуйста, выберите пользователя и роль для обновления.');
+      console.error('Пожалуйста, выберите пользователя, роль и внешний ключ поста для обновления.');
     }
   });
   

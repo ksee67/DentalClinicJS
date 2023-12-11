@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     dataWindow.appendChild(buttonsContainer);
     dataWindow.appendChild(table);
 
-    const exportData = []; // Массив для хранения данных для экспорта
+    const exportData = []; //  для хранения данных для экспорта
 
     for (const history of medicalHistoryData) {
       if (history.Patient_ID === parseInt(patientId)) {
@@ -247,9 +247,7 @@ function createEditButton(history, fullName) {
       }
       const diagnosisData = await diagnosisResponse.json();
 
-      const diagnosisName = diagnosisData.Diagnosis_name; // Retrieve the diagnosis name
-
-      // Construct the URL with the correct diagnosisName obtained from the API response
+      const diagnosisName = diagnosisData.Diagnosis_name; 
       window.location.href = `MedicalHistoryEdit.html?id=${medicalHistoryId}&patientId=${patientId}&fullName=${encodeURIComponent(fullName)}&diagnosisId=${diagnosisId}&diagnosis=${encodeURIComponent(diagnosisName)}&start_date=${history.Start_date}&end_date=${history.End_date}&treatment=${history.Treatment}&notes=${encodeURIComponent(history.Notes)}&searchDiagnosis=`;
     } catch (error) {
       console.error('Ошибка при получении данных о диагнозе:', error);
@@ -305,7 +303,6 @@ function formatDate(dateString) {
 function exportToSQL(data, fullName) {
   let sqlScript = `-- SQL скрипт для экспорта истории болезни of ${fullName}\n\n`;
 
-  // Маппинг русских названий столбцов на английские
   const columnMapping = {
     'Пациент': 'Patient',
     'Начало лечения': 'Start_date',
@@ -358,7 +355,7 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
   formData.append('file', file);
 
   try {
-    const response = await fetch('http://localhost:3000/import-medical-history', {
+    const response = await fetch('http://localhost:3001/import-medical-history', {
       method: 'POST',
       body: formData
     });
@@ -368,8 +365,9 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
     }
 
     const result = await response.text();
-    alert(result); // Отображение сообщения об успешном импорте
+    alert(result); // Изменили здесь
   } catch (error) {
     console.error('Ошибка при отправке запроса:', error);
   }
 });
+
