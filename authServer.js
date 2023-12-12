@@ -59,10 +59,11 @@ app.delete('/logout', (req, res) => {
   });
 });
 
+
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   
-  connection.query('SELECT * FROM Doctor WHERE Login_doctor = ? AND Password_doctor = ?', [email, password], (err, results) => {
+  connection.query('SELECT * FROM Users WHERE Login = ? AND Password = ?', [email, password], (err, results) => {
     if (err) {
       console.error('Ошибка при поиске пользователя:', err);
       return res.sendStatus(500);
@@ -72,7 +73,7 @@ app.post('/login', (req, res) => {
     }
 
     const user = {
-      id: results[0].ID_Doctor, 
+      id: results[0].ID_User, 
       email: email,
       password: password
     };
@@ -80,7 +81,7 @@ app.post('/login', (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
     
-    connection.query('UPDATE user_tokens SET refresh_token = ? WHERE ID_Doctor = ?', [refreshToken, results[0].ID_Doctor], (err) => {
+    connection.query('UPDATE user_tokens SET refresh_token = ? WHERE ID_User = ?', [refreshToken, results[0].ID_User], (err) => {
       if (err) {
         console.error('Ошибка при обновлении refresh токена:', err);
         return res.sendStatus(500);
@@ -89,6 +90,7 @@ app.post('/login', (req, res) => {
     });
   });
 });
+
 
 
 function generateAccessToken(user){ 
@@ -105,6 +107,51 @@ function authenticateToken(req, res, next) {
     next();
   });
 }
+
+const bcrypt = require('bcrypt');
+const saltRounds = 10; 
+
+app.post('/register', (req, res) => {
+  const userData = req.body;
+
+  bcrypt.hash(userData.password, saltRounds, (err, hash) => {
+    if (err) {
+      console.error('Ошибка при хешировании пароля:', err);
+      return res.status(500).json({ error: 'Ошибка при регистрации пользователя' });
+    }
+
+    userData.password = hash;
+
+    const attributesToHash = [
+      'Password'
+    ];
+
+    const hashAttributes = () => {
+      const attribute = attributesToHash.shift();
+      if (!attribute) {
+        connection.query('INSERT INTO Users SET ?', userData, (err, result) => {
+          if (err) {
+            console.error('Ошибка при сохранении данных пользователя:', err);
+            return res.status(500).json({ error: 'Ошибка при сохранении данных пользователя' });
+          }
+          res.status(201).json({ message: 'Пользователь успешно зарегистрирован' });
+        });
+      } else {
+        bcrypt.hash(userData.password, saltRounds, (err, hash) => {
+          if (err) {
+            console.error('Ошибка при хешировании пароля:', err);
+            return res.status(500).json({ error: 'Ошибка при регистрации пользователя' });
+          }
+        
+          userData.password = hash;
+          hashAttributes();        
+        });
+      }
+    };
+
+    hashAttributes();
+  });
+});
 
 app.get('/current-user', authenticateToken, (req, res) => {
   res.json({ username: req.user.name });

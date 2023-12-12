@@ -28,43 +28,48 @@
           <div class="left-section" style="margin-left: 0px; margin-top: 0px;">
             <h1 style="color: #3167D9;margin-right: 420px;">Регистрация сотрудников в системе
             </h1>
-            <form id="userForm">
-                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
-                  <label for="name" style="font-size: 26px; margin-left: 10px;">Имя:</label>
-                  <input type="text" id="name" name="name" required maxlength="30">
-                </div>
-                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
-                  <label for="surname" style="font-size: 26px; margin-left: 10px;">Фамилия:</label>
-                  <input type="text" id="surname" name="surname" required maxlength="30">
-                </div>
-                <div class="input-section" style="margin-left: 30px; margin-top: 20px;">
-                  <label for="middleName" style="font-size: 26px; margin-left: 10px;">Отчество:</label>
-                  <input type="text" id="middleName" name="middleName" maxlength="30">
-                </div>
-                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
-                  <label for="password" style="font-size: 26px; margin-left: 10px;">Пароль:</label>
-                  <input type="password" style="font-size: 26px;" id="password" name="password" required maxlength="30">
-                </div>
-                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
-                  <label for="login" style="font-size: 26px; margin-left: 10px;">Логин:</label>
-                  <input type="text" id="login" name="login" required maxlength="30">
-                </div>
-                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
-                  <label for="email" style="font-size: 26px; margin-left: 10px; margin-top: 20px;">Email:</label>
-                  <input type="email" style="font-size: 26px;"  id="email" name="email" required maxlength="50">
-                </div>
-                <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
-                  <label for="postID" style="font-size: 26px; margin-left: 10px;">Должность:</label>
-                  <select id="postID" name="postID" required>
-                    <!-- Опции для выбора должности -->
-                  </select>
-                </div>
-                <button  class="login-button" style="margin-left: 0px;" type="submit">Создать пользователя</button>
-              </form>
-		
-			
-
-			</div>
+            <form id="userForm" onsubmit="submitForm(event)">
+              <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                <label for="name" style="font-size: 26px; margin-left: 10px;">Имя:</label>
+                <input type="text" id="name" name="name" required maxlength="30">
+              </div>
+              <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                <label for="surname" style="font-size: 26px; margin-left: 10px;">Фамилия:</label>
+                <input type="text" id="surname" name="surname" required maxlength="30">
+              </div>
+              <div class="input-section" style="margin-left: 30px; margin-top: 20px;">
+                <label for="middleName" style="font-size: 26px; margin-left: 10px;">Отчество:</label>
+                <input type="text" id="middleName" name="middleName" maxlength="30">
+              </div>
+              <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                <label for="password" style="font-size: 26px; margin-left: 10px;">Пароль:</label>
+                <input type="password" style="font-size: 26px;" id="password" name="password" required maxlength="30">
+              </div>
+              <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                <label for="login" style="font-size: 26px; margin-left: 10px;">Логин:</label>
+                <input type="text" id="login" name="login" required maxlength="30">
+              </div>
+              <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                <label for="email" style="font-size: 26px; margin-left: 10px; margin-top: 20px;">Email:</label>
+                <input type="email" style="font-size: 26px;" id="email" name="email" required maxlength="50">
+              </div>
+              <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
+                <label for="postID" style="font-size: 26px; margin-left: 10px;">Должность:</label>
+                <select id="postID" name="postID" required>
+                  <option>
+                    Стоматолог
+                  </option>
+                  <option>
+                    Админчик
+                  </option>
+                  <option>
+                    Регистратор
+                  </option>
+                </select>
+              </div>
+              <button class="login-button" style="margin-left: 0px;" type="submit">Создать пользователя</button>
+            </form>
+    </div>
 
 	</div>
 </div>

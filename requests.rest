@@ -26,3 +26,18 @@ Content-Type: application/json
 ###
 GET http://localhost:4000/current-user
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJpdmFuQGV4YW1wbGUuY29tIiwicGFzc3dvcmQiOiJzZWNyZXRQYXNzd29yZCIsImlhdCI6MTcwMTYyNDg2MywiZXhwIjoxNzAxNjI0OTIzfQ.S9NGs2X7tvhlAkAmGnj_LWGTO7yOczpGZCt2DWVNxsI
+
+###
+
+POST http://localhost:4000/register
+Content-Type: application/json
+
+{
+"name": "Петр",
+  "surname": "Петров",
+  "middleName": "",
+  "email": "petr@example.com",
+  "password": "securePassword123",
+  "login": "petr123",
+  "Post_ID": 2 
+}

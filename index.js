@@ -100,6 +100,10 @@ app.post('/import-sql', upload.single('sqlFile'), (req, res) => {
   });
 });
 
+app.get('/register', (req, res) => {
+  res.sendFile('/public/AdminReg.html');
+});
+
 app.post('/payments', (req, res) => {
   const paymentData = req.body; 
 
@@ -557,12 +561,10 @@ app.get('/doctors/:id', (req, res) => {
   });
 });
 
-
-
 app.get('/user/:id', (req, res) => {
   const userId = req.params.id; 
 
-  const sql = 'SELECT Name_doctor FROM Doctor WHERE ID_Doctor = ?';
+  const sql = 'SELECT Surname FROM Users WHERE ID_User = ?';
   pool.query(sql, userId, (err, results) => {
     if (err) {
       console.error('Ошибка при запросе пользователя из базы данных:', err);
@@ -573,10 +575,67 @@ app.get('/user/:id', (req, res) => {
       return res.status(404).json({ message: 'Пользователь не найден' });
     }
 
-    const userName = results[0].Name_doctor; 
+    const userName = results[0].Surname; 
     res.json({ name: userName }); 
   });
 });
+
+app.delete('/logout', (req, res) => {
+  // Implement logout functionality here
+  // You can clear user sessions, tokens, or perform other necessary actions
+  res.sendStatus(204); // Send a success status for the logout
+});
+
+function authorizeAdmin(req, res, next) {
+  const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+  const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+  const token = req.headers.authorization?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).send('Токен отсутствует');
+  }
+
+  jwt.verify(token, accessTokenSecret, (err, decoded) => {
+    if (err) {
+      return res.status(403).send('Недействительный токен');
+    }
+
+    const userId = decoded.id; // Получаем ID пользователя из декодированного токена
+
+    const sql = `
+      SELECT P.Post_Name AS Role
+      FROM Users U
+      JOIN Post P ON U.Post_ID = P.ID_Post
+      WHERE U.ID_User = ?
+    `;
+
+    pool.query(sql, userId, (err, results) => {
+      if (err) {
+        console.error('Ошибка при запросе роли пользователя из базы данных:', err);
+        res.status(500).send('Ошибка при запросе роли пользователя');
+      } else {
+        if (results.length === 0) {
+          console.error('Пользователь не найден');
+          res.status(404).send('Пользователь не найден');
+        } else {
+          const userRole = results[0].Role;
+
+          if (userRole === '2') {
+            req.user = decoded;
+            next();
+          } else {
+            res.status(403).send('Доступ запрещен');
+          }
+        }
+      }
+    });
+  });
+}
+
+app.get('/AdminPanel', authorizeAdmin, (req, res) => {
+  res.sendFile('/public/AdminPanel.html');
+});
+
 
 app.listen(port, () => {
   console.log('Сервер запущен на порту 3001');
