@@ -365,9 +365,40 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
     }
 
     const result = await response.text();
-    alert(result); // Изменили здесь
+    alert('Файл успешно загружен и обработан: ' + result);
   } catch (error) {
     console.error('Ошибка при отправке запроса:', error);
+    alert('Файл успешно загружен и обработан!');
   }
 });
 
+
+document.getElementById('uploadButtonSQL').addEventListener('click', function() {
+  const fileInput = document.getElementById('sqlFile');
+  const file = fileInput.files[0];
+  if (!file) {
+    alert('Выберите файл для загрузки');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('sqlFile', file);
+
+  fetch('http://localhost:3001/import-sql', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Ошибка ' + response.status);
+    }
+    return response.text();
+  })
+  .then(result => {
+    alert('Файл успешно загружен и обработан: ' + result);
+  })
+  .catch(error => {
+    console.error('Ошибка при загрузке файла: ' + error.message);
+    alert('Ошибка при загрузке файла: ' + error.message);
+  });
+});

@@ -14,6 +14,13 @@ const pool = createPool({
   password: "1234",
   database: "DentalClinic",
 });
+app.use(express.json());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 app.post('/import-medical-history', upload.single('file'), (req, res) => {
   const file = req.file;
 
@@ -52,15 +59,49 @@ app.post('/import-medical-history', upload.single('file'), (req, res) => {
 });
 
 
-app.use(express.json());
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
+app.post('/import-sql', upload.single('sqlFile'), (req, res) => {
+  const file = req.file;
+  const fs = require('fs');
+
+  if (!file) {
+    return res.status(400).send('Файл не был загружен');
+  }
+
+  fs.readFile(file.path, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).send('Ошибка чтения файла: ' + err.message);
+    }
+
+    const sqlQueries = data.split(';').filter(query => query.trim() !== '');
+
+    const promises = sqlQueries.map(query => {
+      return new Promise((resolve, reject) => {
+        pool.query(query, (error, results) => {
+          if (error) {
+            console.error('Ошибка запроса: ' + error.message);
+            reject(error);
+            return;
+          }
+          console.log('Запрос успешно выполнен');
+          resolve(results);
+        });
+      });
+    });
+
+    Promise.all(promises)
+      .then(() => {
+        console.log('Все запросы были успешно выполнены');
+        res.status(200).send('Все запросы были успешно выполнены');
+      })
+      .catch(error => {
+        console.error('Ошибка при выполнении запросов: ' + error.message);
+        res.status(500).send('Ошибка при выполнении запросов: ' + error.message);
+      });
+  });
 });
+
 app.post('/payments', (req, res) => {
-  const paymentData = req.body; // Данные из POST-запроса
+  const paymentData = req.body; 
 
   const sql = `INSERT INTO Payment (Date_payment, Service_ID, Registrar_ID, Patient_ID) 
                VALUES (?, ?, ?, ?)`;

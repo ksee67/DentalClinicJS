@@ -1,0 +1,2 @@
+INSERT INTO Medical_history (Start_date, End_date, Treatment, Notes, Diagnosis_ID, Patient_ID)
+VALUES ('2023-01-01', '2023-01-15', 'Заболевание кариес', 'Нет', 1, 5),
