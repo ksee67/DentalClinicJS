@@ -45,7 +45,7 @@ function sortPatientsDesc() {
   visibleCards.sort((a, b) =>
     b.querySelector('.patient-info h2').textContent.localeCompare(a.querySelector('.patient-info h2').textContent)
   );
-  showPage(1); // Показать отсортированные карточки на первой странице
+  showPage(1); //  отсортированные карточки на первой странице
 }
 
   function renderCards() {
@@ -65,43 +65,37 @@ function sortPatientsDesc() {
       throw new Error('Ошибка при получении данных о пациентах');
     }
     const patients = await response.json();
-
     patients.forEach(patient => {
       const card = document.createElement('div');
       card.classList.add('card');
-
+    
       const patientInfo = document.createElement('div');
       patientInfo.classList.add('patient-info');
-
+    
       const fullName = document.createElement('h2');
       fullName.textContent = `ФИО: ${patient.Surname_patient} ${patient.Name_patient} ${patient.Middle_patient || ''}`;
-
+    
       const birthDate = document.createElement('p');
       birthDate.textContent = `Дата рождения: ${formatDate(new Date(patient.Date_of_birth))}`;
-
+    
       const medicalCardNumber = document.createElement('p');
       medicalCardNumber.textContent = `Медицинская карта №: ${patient.ID_Patient}`;
-
-      const doctor = document.createElement('p');
-      doctor.textContent = `Врач: ${patient.Doctor || 'Нет информации'}`;
-
+    
       patientInfo.appendChild(fullName);
       patientInfo.appendChild(birthDate);
       patientInfo.appendChild(medicalCardNumber);
-      patientInfo.appendChild(doctor);
-
+    
       const detailsButton = document.createElement('button');
       detailsButton.classList.add('details-button');
       detailsButton.textContent = 'Подробнее';
-       // Нажатие кнопки "Подробнее" передает айди и ФИО на страницу MedicalHistory.html
-  detailsButton.addEventListener('click', () => {
-    const fullName = `${patient.Surname_patient} ${patient.Name_patient} ${patient.Middle_patient || ''}`;
-    handleDetailsClick(patient.ID_Patient, fullName);
-  });
-
+      detailsButton.addEventListener('click', () => {
+        const fullName = `${patient.Surname_patient} ${patient.Name_patient} ${patient.Middle_patient || ''}`;
+        handleDetailsClick(patient.ID_Patient, fullName);
+      });
+    
       card.appendChild(patientInfo);
       card.appendChild(detailsButton);
-
+    
       allCards.push(card);
     });
 
@@ -112,7 +106,7 @@ function sortPatientsDesc() {
     sortAscButton.addEventListener('click', sortPatientsAsc);
     sortDescButton.addEventListener('click', sortPatientsDesc);
   
-    showPage(1); // Добавьте эту строку для отображения всех карточек после загрузки
+    showPage(1); //  для отображения всех карточек после загрузки
   } catch (error) {
     console.error('Ошибка при получении данных о пациентах:', error);
   }
@@ -162,7 +156,7 @@ function sortPatientsDesc() {
 
   async function filterByAgeCategory() {
     const selectedCategory = document.getElementById('rating').value;
-    const cards = Array.from(cardsContainer.querySelectorAll('.card'));
+    const cards = Array.from(allCards); //  копию всех карточек
   
     cards.forEach(card => {
       const birthDateElement = card.querySelector('.patient-info p:nth-child(2)');
@@ -170,14 +164,20 @@ function sortPatientsDesc() {
         const dateOfBirth = new Date(birthDateElement.textContent.split(': ')[1]);
         const age = getAge(dateOfBirth);
   
-        if (selectedCategory === 'Дети' && age < 18) {
+        if (selectedCategory === '1') { // Все
           card.style.display = 'block';
-        } else if (selectedCategory === 'Взрослые' && age >= 18) {
-          card.style.display = 'block';
-        } else if (selectedCategory === 'Все') {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
+        } else if (selectedCategory === '2') { // Дети
+          if (age < 18) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        } else if (selectedCategory === '3') { // взрослые
+          if (age >= 18) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
         }
       }
     });
@@ -188,3 +188,39 @@ function sortPatientsDesc() {
   }
   
 });
+const recognition = new window.webkitSpeechRecognition(); //  экземпляр распознавания речи
+
+const input = document.querySelector('input'); //  инпут, в который будет вводиться текст с помощью голоса
+
+recognition.lang = 'ru-RU'; //  язык для распознавания
+recognition.interimResults = false; //  опция для промежуточных результатов 
+
+//  при завершении распознавания речи
+recognition.onresult = (event) => {
+  const speechToText = event.results[0][0].transcript; //  распознанный текст из результатов
+  input.value = speechToText; // заплчнения значение инпута текстом из голоса
+};
+
+//  при ошибке распознавания
+recognition.onerror = (event) => {
+  console.error('Ошибка распознавания речи:', event.error);
+};
+
+//  при начале распознавания речи
+recognition.onstart = () => {
+  console.log('Начато распознавание речи...');
+};
+
+// при завершении распознавания речи
+recognition.onend = () => {
+  console.log('Распознавание речи завершено');
+};
+
+//  запуск распознавания речи при клике 
+const startSpeechRecognition = () => {
+  recognition.start(); // Запускаем распознавание речи
+};
+
+// привязка функции к событию клик по кнопке
+const startButton = document.getElementById('startButton'); 
+startButton.addEventListener('click', startSpeechRecognition);

@@ -75,7 +75,7 @@
     </div>
 </div>
 <div>
-    <label for="startDate">Начальная дата:</label>
+    <label  style="margin-top: 10px;margin-left: 50px;" for="startDate">Начальная дата:</label>
     <input type="date" id="startDate">
   
     <label for="endDate">Конечная дата:</label>
@@ -85,14 +85,16 @@
 
   </div>
   <div>
-    <button id="updateButton" class="login-button" window.location.href="../public/appointmentUpdate.html" style="margin-left: 0px;">Изменить запись на прием</button>   
-    <label for="patientName">Поиск по ФИО пациента:</label>
+    <button  style="display: none;"  id="updateButton" class="login-button" window.location.href="../public/appointmentUpdate.html" style="margin-left: 0px;">Изменить запись на прием</button>   
+<label style="margin-top: 10px;margin-left: 50px;" for="doctorName">Поиск по ФИО врача:</label>
+<input style="margin-top: 10px;"  type="text" id="doctorName" placeholder="Введите ФИО врача">
+<label for="patientName">Поиск по ФИО пациента:</label>
 <input type="text" id="patientName" placeholder="Введите ФИО пациента">
 
-<label for="doctorName">Поиск по ФИО врача:</label>
-<input type="text" id="doctorName" placeholder="Введите ФИО врача">
   </div>
-<table border="1">
+  <div style="overflow-x: auto;margin-left: 50px; overflow-y: auto; width: 1400px; height: 500px;">
+
+<table style="margin-left: 50px;"  border="1">
     <thead>
       <tr>
         <th>Дата приема</th>
@@ -108,6 +110,7 @@
       <!-- Здесь будут данные из базы данных -->
     </tbody>
   </table>
+</div>
 
   <p style="color: #f3f5f9;">-</p>
   <p style="color: #f3f5f9;">-</p>

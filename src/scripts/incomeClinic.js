@@ -1,7 +1,7 @@
 function formatDateString(dateString) {
   const date = new Date(dateString);
   if (isNaN(date)) {
-    return null; // Возвращаем null, если входная строка не является корректной датой
+    return null; // 
   }
   const formattedDate = date.toISOString().split('T')[0];
   return formattedDate;
@@ -185,3 +185,106 @@ document.getElementById('weeklyButton').addEventListener('click', () => {
 
   generateStatistics(startDate, endDate);
 });
+function createTable(data, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) {
+    console.error('Контейнер не найден');
+    return;
+  }
+
+  if (!data || (Array.isArray(data) && data.every(subArray => Array.isArray(subArray) && subArray.length === 0))) {
+    container.innerHTML = 'Платежи отсутствуют';
+    return;
+  }
+
+  const table = document.createElement('table');
+  const header = table.createTHead();
+  const row = header.insertRow();
+
+  const keys = Object.keys(data[0]);
+  const fieldsToSkip = ['ID_Payment', 'TotalIncome'];
+
+  keys.forEach(key => {
+    if (!fieldsToSkip.includes(key)) {
+      const th = document.createElement('th');
+      switch(key) {
+        case 'Date_payment':
+          th.appendChild(document.createTextNode('Дата платежа'));
+          break;
+        case 'Service_name':
+          th.appendChild(document.createTextNode('Наименование услуги'));
+          break;
+        case 'RegistrarFullName':
+          th.appendChild(document.createTextNode('ФИО регистратора'));
+          break;
+        case 'PatientFullName':
+          th.appendChild(document.createTextNode('ФИО пациента'));
+          break;
+        default:
+          th.appendChild(document.createTextNode(key));
+          break;
+      }
+      row.appendChild(th);
+    }
+  });
+
+  const body = table.createTBody();
+  data.forEach(obj => {
+    const newRow = body.insertRow();
+    keys.forEach(key => {
+      if (!fieldsToSkip.includes(key)) {
+        const cell = newRow.insertCell();
+        if (key === 'Date_payment') {
+          const formattedDate = formatDateString(obj[key]);
+          cell.appendChild(document.createTextNode(formattedDate));
+        } else {
+          cell.appendChild(document.createTextNode(obj[key]));
+        }
+      }
+    });
+  });
+
+  container.innerHTML = '';
+  container.appendChild(table);
+}
+function createClinicIncomeTable(data, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) {
+    console.error('Контейнер не найден');
+    return;
+  }
+
+  if (!data || (Array.isArray(data) && data.every(subArray => Array.isArray(subArray) && subArray.length === 0))) {
+    container.innerHTML = 'Платежи отсутствуют';
+    return;
+  }
+
+  const totalIncomeData = data.find(item => item.TotalIncome !== undefined);
+  if (totalIncomeData) {
+    const totalIncomeText = `Доход клиники составил: ${totalIncomeData.TotalIncome} руб`;
+    container.innerHTML = totalIncomeText;
+  }
+}
+
+
+
+function getPaymentsForToday() {
+  fetch('http://localhost:3001/PaymentsForToday')
+  .then(response => response.json())
+  .then(data => createTable(data[0], 'paymentsForToday')) 
+  .catch(error => console.error('Ошибка:', error));
+}
+
+
+function getLastPaymentInfo() {
+  fetch('http://localhost:3001/LastPaymentInfo')
+    .then(response => response.json())
+    .then(data => createTable(data[0], 'lastPaymentInfo')) 
+    .catch(error => console.error('Ошибка:', error));
+}
+function getCalculateClinicIncome() {
+  fetch('http://localhost:3001/calculateClinicIncome')
+    .then(response => response.json())
+    .then(data => createClinicIncomeTable(data, 'calculateClinicIncomeTable')) 
+    .catch(error => console.error('Ошибка:', error));
+}

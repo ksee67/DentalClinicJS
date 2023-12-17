@@ -55,14 +55,27 @@
 				  </select>
 			</select>
 		<button id="sortByPriceButton">Вывод по ценам</button>!-->
-
-			
-
 		</div>
+		
 				<!--		  <button  id="diagramButton" class="login-button" style="margin-top: 15px; margin-left: 0;">Создать диаграмму</button>   !-->
 			  <canvas id="paymentChart" width="200" height="100"></canvas>
 
 	</div>
+	<h3 style="color: #3167D9;margin-right: 220px;">Процедура на получение более гибких данных о платежах:
+
+	<div  style="margin-top: 20px;margin-left: -70px;">
+	<button class="login-button" onclick="getPaymentsForToday()">Платежи за сегодня</button>
+	<div style="color: black;font-size: 15px;margin-left: 70px;margin-top: 20px;margin-bottom: 20px;" id="paymentsForToday"></div>
+	<button class="login-button" onclick="getLastPaymentInfo()">Последние платежи в базе</button>
+	<div style="color: black;font-size: 15px;margin-left: 70px;margin-top: 20px;"  id="lastPaymentInfo"></div>
+	<div id="calculateClinicIncomeContainer">
+		<h3   style="margin-left: 70px;"  style="color: #3167D9;margin-right: 220px;">Функции хранимые на получение более гибких данных о платежах:</h3>
+		<button  class="login-button" onclick="getCalculateClinicIncome()">Доход клиники от платежей за всё время</button>
+		<div   style="margin-left: 270px;"  style="color: black;font-size: 15px;margin-left: 70px;margin-top: 20px;" id="calculateClinicIncome"></div>
+		<div  id="calculateClinicIncomeTable"></div>
+	  </div>
+	  
+</div>
 </div>
 </div>
 <p style="color: #f3f5f9;">-</p>

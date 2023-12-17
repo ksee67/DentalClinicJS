@@ -799,4 +799,44 @@ body {
 	justify-content: center; /* Центрируем содержимое по горизонтали */
 	gap: 5px; /* Отступ между элементами */
   }
+  input-container {
+	display: flex;
+	align-items: center;
+	width: 300px; /* Измените ширину по вашему усмотрению */
+  }
+  
+  .special-input {
+	flex: 1; /* Занимает всё доступное пространство внутри контейнера */
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin-right: 8px; /* Добавляет небольшое расстояние между инпутом и кнопкой */
+  }
+  
+
+  /* Стили для значка и кнопки */
+.voice-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #3167D9;
+  border-radius: 25px;
+  background-color: #f9faff;
+  cursor: pointer;
+}
+
+/* Стили для иконки внутри кнопки */
+.voice-button i {
+  margin-right: 8px;
+}
+.pagination .active {
+	background-color: #3167D9; /* Цвет для активной кнопки в пагинации */
+	color: white;
+  }
+  #paymentData {
+	max-height: 400px; /* Высота контейнера */
+	overflow: auto; /* Добавление прокрутки, если контент превышает размер контейнера */
+  }
   

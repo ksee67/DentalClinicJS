@@ -12,22 +12,55 @@ async function fetchDoctorSpecialization(doctorId) {
   }
 }
 
-async function fillSpecializationsDropdown(doctorId) {
+async function fillDoctorsDropdown() {
+  try {
+    const doctors = await fetchDoctors();
+    const doctorDropdown = document.getElementById('doctor');
+
+    doctors.forEach((doctor, index) => {
+      const option = document.createElement('option');
+      option.value = doctor.ID_Doctor;
+      option.text = `${doctor.Surname_doctor} ${doctor.Name_doctor} ${doctor.Middle_doctor}`;
+      option.setAttribute('data-category-id', doctor.category_id); // Store category_id as data attribute
+      doctorDropdown.appendChild(option);
+
+      if (index === 0) {
+        option.selected = true; // Set the first option as selected by default
+      }
+    });
+
+    doctorDropdown.addEventListener('change', function () {
+      const selectedDoctorId = this.value;
+      const selectedOption = this.options[this.selectedIndex];
+      const departmentId = selectedOption.getAttribute('data-category-id');
+      fillSpecializationsDropdown(selectedDoctorId, departmentId);
+    });
+
+    // Trigger initial department load and specialization based on the first doctor
+    const initialDepartmentId = doctorDropdown.options[doctorDropdown.selectedIndex].getAttribute('data-category-id');
+    fillSpecializationsDropdown(doctors[0].ID_Doctor, initialDepartmentId); // Load specialization for the first doctor
+  } catch (error) {
+    console.error('Ошибка заполнения данных о врачах:', error);
+  }
+}
+
+
+async function fillSpecializationsDropdown(doctorId, departmentId) {
   try {
     const response = await fetch(`http://localhost:3001/doctors/${doctorId}`);
     if (!response.ok) {
       throw new Error('Ошибка при получении данных о враче');
     }
     const doctorData = await response.json();
-    
+
     const specializationDropdown = document.getElementById('specialization');
     specializationDropdown.innerHTML = '';
 
     const specialization = doctorData.Specialization;
     if (specialization) {
       const option = document.createElement('option');
-      option.value = specialization; // Устанавливаем значение специализации
-      option.text = specialization;
+      option.value = specialization;
+      option.text = `${specialization} (${departmentId})`; 
       specializationDropdown.appendChild(option);
     }
   } catch (error) {
@@ -63,30 +96,7 @@ async function fetchDoctors() {
   }
 }
 
-async function fillDoctorsDropdown() {
-  try {
-    const doctors = await fetchDoctors();
-const doctorDropdown = document.getElementById('doctor');
 
-doctorDropdown.addEventListener('change', function() {
-  const selectedDoctorId = this.value;
-  fillSpecializationsDropdown(selectedDoctorId);
-});
-
-    doctors.forEach(doctor => {
-      const option = document.createElement('option');
-      option.value = doctor.ID_Doctor;
-      option.text = `${doctor.Surname_doctor} ${doctor.Name_doctor} ${doctor.Middle_doctor}`;
-      doctorDropdown.appendChild(option);
-    });
-
-    // Инициализация отображения специализации при загрузке страницы
-    const initialDoctorId = doctorDropdown.value;
-    fillSpecializationsDropdown(initialDoctorId);
-  } catch (error) {
-    console.error('Ошибка заполнения данных о врачах:', error);
-  }
-}
 async function fetchTimeSlots() {
   try {
     const response = await fetch('http://localhost:3001/timeslots');
@@ -160,6 +170,16 @@ function checkForSunday() {
         throw new Error('Ошибка при получении данных о пациентах');
       }
       const patients = await response.json();
+      const inputDate = document.getElementById('selectedDate');
+      const currentDate = new Date(); // Получаем текущую дату
+      const currentMonth = currentDate.getMonth() + 1; // Получаем текущий месяц
+      const currentDay = currentDate.getDate(); // Получаем текущий день
+  
+      // Формируем строку для текущей даты в формате YYYY-MM-DD
+      const formattedCurrentDate = `${currentDate.getFullYear()}-${currentMonth.toString().padStart(2, '0')}-${currentDay.toString().padStart(2, '0')}`;
+      
+      // Устанавливаем текущую дату в качестве значения по умолчанию для поля выбора даты
+      inputDate.value = formattedCurrentDate;
   
       const patientSelect = document.getElementById('patient');
       const searchInput = document.getElementById('searchPatient');
@@ -222,6 +242,7 @@ function checkForSunday() {
     
           if (response.ok) {
             alert('Запись успешно добавлена');
+            window.location.reload(); // Reload the page after adding an 
           } else {
             throw new Error('Ошибка при добавлении записи');
           }

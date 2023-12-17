@@ -30,11 +30,11 @@
             </h1>
             <form id="userForm" onsubmit="submitForm(event)">
               <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
-                <label for="name" style="font-size: 26px; margin-left: 10px;">Имя:</label>
+                <label for="name" style="font-size: 26px; margin-left: 10px;">Фамилия:</label>
                 <input type="text" id="name" name="name" required maxlength="30">
               </div>
               <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
-                <label for="surname" style="font-size: 26px; margin-left: 10px;">Фамилия:</label>
+                <label for="surname" style="font-size: 26px; margin-left: 10px;">Имя:</label>
                 <input type="text" id="surname" name="surname" required maxlength="30">
               </div>
               <div class="input-section" style="margin-left: 30px; margin-top: 20px;">
@@ -44,7 +44,10 @@
               <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
                 <label for="password" style="font-size: 26px; margin-left: 10px;">Пароль:</label>
                 <input type="password" style="font-size: 26px;" id="password" name="password" required maxlength="30">
+                <button id="showPasswordButton" class="button" onclick="togglePasswordVisibility('password')">Показать пароль</button>
               </div>
+       
+              
               <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
                 <label for="login" style="font-size: 26px; margin-left: 10px;">Логин:</label>
                 <input type="text" id="login" name="login" required maxlength="30">
@@ -54,18 +57,12 @@
                 <input type="email" style="font-size: 26px;" id="email" name="email" required maxlength="50">
               </div>
               <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
-                <label for="postID" style="font-size: 26px; margin-left: 10px;">Должность:</label>
-                <select id="postID" name="postID" required>
-                  <option>
-                    Стоматолог
-                  </option>
-                  <option>
-                    Админчик
-                  </option>
-                  <option>
-                    Регистратор
-                  </option>
-                </select>
+                <label for="post_ID" style="font-size: 26px; margin-left: 10px;">Должность:</label>
+                <select id="post_ID" name="post_ID" required style="font-size: 26px; margin-bottom: 50px; margin-top: 20px;">
+                  <option value="1">Стоматолог</option>
+                  <option value="2">Администратор</option>
+                  <option value="3">Регистратор</option>
+                </select>                
               </div>
               <button class="login-button" style="margin-left: 0px;" type="submit">Создать пользователя</button>
             </form>

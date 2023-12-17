@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../src/styles/indexPage.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 	<title>Dental Clinic</title>
 </head>
 <body>
@@ -31,9 +33,15 @@
             <div class="text2">
               Наши дорогие пациенты💙
             </div>
-            <input type="text"  class="special-input" placeholder="Поиск по ФИО пациента">
-                 <!--  <button id="searchButton">Искать</button> -->
-            <div class="sorting">
+            <div class="input-container">
+              <input type="text" class="special-input" placeholder="Поиск по ФИО пациента">
+              <button id="startButton" class="voice-button">
+                <i class="fas fa-microphone"></i> 
+              </button>
+            </div>
+
+            </button>
+                        <div class="sorting">
               <label>Сортировать: </label>
               <button class="button" style="text-align: center;" id="sortAscButton">А↓</button>
               <button class="button" style="text-align: center;" id="sortDescButton">Я↑</button>              

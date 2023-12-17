@@ -2,11 +2,14 @@ const express = require('express');
 const { createPool } = require('mysql');
 const app = express();
 const port = 3001;
+const mysqldump = require('mysqldump');
+
 app.set('appName', 'DentalClinic'); // Пример установки имени приложения в Express
 const multer = require('multer');
 const XLSX = require('xlsx');
 const upload = multer({ dest: 'uploads/' }); // Папка для сохранения загруженных файлов
-
+const fs = require('fs');
+const path = require('path');
 // Создание пула подключений к базе данных
 const pool = createPool({
   host: "localhost",
@@ -14,6 +17,8 @@ const pool = createPool({
   password: "1234",
   database: "DentalClinic",
 });
+const { exec } = require('child_process');
+
 app.use(express.json());
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -21,6 +26,75 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+const connectionOptions = {
+  connection: {
+    host: 'localhost',
+    user: 'root',
+    password: '1234',
+    database: 'DentalClinic'
+  },
+  dumpToFile: 'backup.sql' // Путь для сохранения резервной копии
+};
+app.get('/downloadBackup', (req, res) => {
+  const filePath = path.join(__dirname, 'backup.sql');
+  const dumpCommand = `mysqldump -u root -p 1234 -h localhost DentalClinic -r ${filePath}`;
+
+  exec(dumpCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Ошибка создания резервной копии:', error);
+      res.status(500).send('Произошла ошибка при создании резервной копии');
+    } else {
+      res.download(filePath, 'backup.sql', (err) => {
+        if (err) {
+          console.error('Ошибка скачивания резервной копии:', err);
+          res.status(500).send('Произошла ошибка при скачивании резервной копии');
+        } else {
+          console.log('Резервная копия успешно создана и скачана');
+        }
+      });
+    }
+  });
+});
+
+  
+
+app.post('/import-payment', upload.single('file'), (req, res) => {
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).send('Файл не был загружен');
+  }
+
+  const workbook = XLSX.readFile(file.path);
+  const sheetName = workbook.SheetNames[0]; 
+  const worksheet = workbook.Sheets[sheetName];
+  const excelData = XLSX.utils.sheet_to_json(worksheet);
+
+  const promises = excelData.map(data => {
+    return new Promise((resolve, reject) => {
+      const { Date_payment, Service_ID, Registrar_ID, Patient_ID } = data;
+      const sql = 'INSERT INTO Payment (Date_payment, Service_ID, Registrar_ID, Patient_ID) VALUES (?, ?, ?, ?)';
+      pool.query(sql, [Date_payment, Service_ID, Registrar_ID, Patient_ID], (error, results) => {
+        if (error) {
+          console.error('Ошибка запроса: ' + error.message);
+          reject(error);
+          return;
+        }
+        console.log('Запись успешно добавлена');
+        resolve(results);
+      });
+    });
+  });
+
+  Promise.all(promises)
+    .then(() => {
+      res.status(200).json({ message: 'Все записи успешно добавлены' });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'Произошла ошибка при добавлении записей' });
+    });
+});
+
 app.post('/import-medical-history', upload.single('file'), (req, res) => {
   const file = req.file;
 
@@ -252,6 +326,24 @@ app.get('/medicalHistory', async (req, res) => {
     res.status(500).send('Ошибка сервера');
   }
 });
+app.get('/getPatientId', (req, res) => {
+  const patientName = req.query.patientName; // Получаем параметр из строки запроса
+
+  const sql = 'SELECT ID_Patient FROM Patient WHERE CONCAT(Surname_patient, " ", Name_patient, " ", COALESCE(Middle_patient, "")) = ?';
+  pool.query(sql, [patientName], (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).send('Пациент не найден');
+      return;
+    }
+    const patientID = results[0].Patient_ID;
+    res.json({ patientID }); // Отправляем Patient_ID в формате JSON на клиент
+  });
+});
 
 // Express маршрут для получения списка пациентов
 app.get('/patientsAll', (req, res) => {
@@ -280,29 +372,32 @@ app.get('/services', (req, res) => {
 });
 app.get('/viewappointments', (req, res) => {
   const sqlQuery = `
-    SELECT 
-      a.Date_of_Appointment,
-      d.Surname_doctor,
-      d.Name_doctor,
-      d.Middle_doctor,
-      d.Cabinet_number,
-      tc.category_name AS Department,
-      t.TimeValue AS Time_of_Appointment,
-      CONCAT(p.Surname_patient, ' ', p.Name_patient, ' ', COALESCE(p.Middle_patient, '')) AS Patient_FullName,
-      p.Phone_number AS Patient_Phone
-    FROM 
+  SELECT 
+    a.ID_AppointmentSchedule,
+    a.Date_of_Appointment,
+    d.ID_Doctor AS Doctor_ID,
+    d.Surname_doctor,
+    d.Name_doctor,
+    d.Middle_doctor,
+    d.Cabinet_number,
+    tc.category_name AS Department,
+    t.TimeValue AS Time_of_Appointment,
+    p.ID_Patient AS Patient_ID,
+    CONCAT(p.Surname_patient, ' ', p.Name_patient, ' ', COALESCE(p.Middle_patient, '')) AS Patient_FullName,
+    p.Phone_number AS Patient_Phone
+  FROM 
     AppointmentSchedule a
-    INNER JOIN 
-      Doctor d ON a.Doctor_ID = d.ID_Doctor
-    INNER JOIN 
-      TimeSlots t ON a.TimeSlot_ID = t.ID_TimeSlot
-    INNER JOIN 
-      Patient p ON a.Patient_ID = p.ID_Patient
-    INNER JOIN 
-      treatment_category tc ON d.category_id = tc.ID_Category
-    ORDER BY 
-      a.Date_of_Appointment, t.TimeValue;
-  `;
+  INNER JOIN 
+    Doctor d ON a.Doctor_ID = d.ID_Doctor
+  INNER JOIN 
+    TimeSlots t ON a.TimeSlot_ID = t.ID_TimeSlot
+  INNER JOIN 
+    Patient p ON a.Patient_ID = p.ID_Patient
+  INNER JOIN 
+    treatment_category tc ON d.category_id = tc.ID_Category
+  ORDER BY 
+    a.Date_of_Appointment, t.TimeValue;
+`;
 
   pool.query(sqlQuery, (error, results) => {
     if (error) {
@@ -315,7 +410,7 @@ app.get('/viewappointments', (req, res) => {
 });
 // Получение списка ролей
 app.get('/roles', (req, res) => {
-  const query = 'SELECT DISTINCT PostName AS Role FROM FullUserData'; // Запрос для получения уникальных ролей
+  const query = 'SELECT * FROM Post'; // Запрос для получения уникальных ролей
   pool.query(query, (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Ошибка получения данных о ролях' });
@@ -326,50 +421,34 @@ app.get('/roles', (req, res) => {
     res.json(results);
   });
 });
-app.put('/user/:userId/role/:roleId', (req, res) => {
-  const { userId, roleId } = req.params;
-
-  if (roleId === 'administratorRoleId') {
-     const updateQuery = 'UPDATE Administrator SET Post_ID = ? WHERE ID_Administrator = ?';
-  } else if (roleId === 'doctorRoleId') {
-     const updateQuery = 'UPDATE Doctor SET Post_ID = ? WHERE ID_Doctor = ?';
-  } else if (roleId === 'registrarRoleId') {
-    const updateQuery = 'UPDATE Registrar SET Post_ID = ? WHERE ID_Registrar = ?';
-  } else {
-    res.status(400).json({ error: 'Неверный ID роли' });
-    return;
-  }
-
-  res.status(200).json({ message: `Роль пользователя с ID ${userId} изменена на ${roleId}` });
-});
-
-// Получение списка всех пользователей
-app.get('/users', (req, res) => {
-  const query = `
-    SELECT 
-      CONCAT(Administrator_FullName) AS FullName 
-    FROM FullUserData
-    UNION
-    SELECT 
-      CONCAT(Doctor_FullName) AS FullName 
-    FROM FullUserData
-    UNION
-    SELECT 
-      CONCAT(Registrar_FullName) AS FullName 
-    FROM FullUserData
-  `;
-  
+app.get('/calculateClinicIncome', (req, res) => {
+  const query = 'SELECT CalculateClinicIncome() AS TotalIncome;'; 
   pool.query(query, (error, results) => {
     if (error) {
-      res.status(500).json({ error: 'Ошибка получения данных о пользователях' });
+      res.status(500).json({ error: 'Ошибка получения данных о ролях' });
       throw error;
     }
-    
-    // Отправляем данные в формате JSON в ответ на запрос
-    res.json(results);
+        res.json(results);
   });
 });
+app.put('/user/:userId/role/:roleId', (req, res) => {
+  const userId = req.params.userId; //  userId из запроса
+  const roleId = req.params.roleId; //  roleId из запроса
 
+  const query = 'UPDATE Users SET Post_ID = ? WHERE ID_User = ?'; //  для обновления роли пользователя
+  pool.query(query, [roleId, userId], (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Ошибка при обновлении роли пользователя' });
+      throw error;
+    }
+
+    if (results.affectedRows > 0) {
+      res.status(200).json({ message: 'Роль пользователя успешно обновлена' });
+    } else {
+      res.status(404).json({ error: 'Пользователь не найден или роль не изменена' });
+    }
+  });
+});
 
 // Express маршрут для получения информации о пациенте по ID
 app.get('/patients/:id', (req, res) => {
@@ -433,6 +512,27 @@ app.post('/addPatient', (req, res) => {
   });
 });
 // Получение данных из таблицы AppointmentSchedule
+app.get('/allappointments', (req, res) => {
+  const sql = `SELECT ASch.ID_AppointmentSchedule, ASch.Date_of_Appointment,
+    ASch.Doctor_ID, CONCAT(Doc.Surname_doctor, ' ', Doc.Name_doctor, ' ', Doc.Middle_doctor) AS Doctor_Name, Doc.Specialization,
+    ASch.Patient_ID, CONCAT(Pat.Surname_patient, ' ', Pat.Name_patient, ' ', Pat.Middle_patient) AS Patient_Name,
+    ASch.TimeSlot_ID, TS.TimeValue
+    FROM AppointmentSchedule AS ASch
+    INNER JOIN TimeSlots AS TS ON ASch.TimeSlot_ID = TS.ID_TimeSlot
+    INNER JOIN Patient AS Pat ON ASch.Patient_ID = Pat.ID_Patient
+    INNER JOIN Doctor AS Doc ON ASch.Doctor_ID = Doc.ID_Doctor`;
+  
+  pool.query(sql, (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.json(results); // Отправляем данные в формате JSON на клиент
+  });
+});
+
+// Получение данных из таблицы AppointmentSchedule
 app.get('/appointments', (req, res) => {
   const sql = 'SELECT * FROM AppointmentSchedule';
   pool.query(sql, (error, results) => {
@@ -447,7 +547,7 @@ app.get('/appointments', (req, res) => {
 // Удаление записи из таблицы AppointmentSchedule по id
 app.delete('/appointments/:id', (req, res) => {
   const appointmentId = req.params.id;
-  const sql = `DELETE FROM AppointmentSchedule WHERE id = ?`;
+  const sql = `DELETE FROM AppointmentSchedule WHERE ID_AppointmentSchedule = ?`;
   pool.query(sql, [appointmentId], (error, results) => {
     if (error) {
       console.error('Ошибка запроса: ' + error.message);
@@ -532,6 +632,16 @@ app.get('/timeslots', (req, res) => {
     }
   });
 });
+app.get('/users', (req, res) => {
+  const sql = "SELECT Users.ID_User, CONCAT(Users.Name, ' ', Users.Surname, ' ', Users.MiddleName) AS FullName, Users.Email, Users.Login, Users.Post_ID, Post.ID_Post, Post.Post_name FROM Users INNER JOIN Post ON Users.Post_ID = Post.ID_Post;";
+  pool.query(sql, (error, results) => {
+    if (error) {
+      res.status(500).json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 // Обработчик запроса на получение списка врачей
 app.get('/doctors', (req, res) => {
   const sql = 'SELECT * FROM Doctor;';
@@ -561,10 +671,40 @@ app.get('/doctors/:id', (req, res) => {
   });
 });
 
-app.get('/user/:id', (req, res) => {
+app.get('/myappointments', (req, res) => {
+  const sql = `
+    SELECT 
+      AppointmentSchedule.ID_AppointmentSchedule,
+      AppointmentSchedule.Date_of_Appointment,
+      Doctor.ID_Doctor AS Doctor_ID,
+      CONCAT(Doctor.Surname_doctor, ' ', Doctor.Name_doctor, IFNULL(CONCAT(' ', Doctor.Middle_doctor), '')) AS Doctor_Info,
+      Patient.ID_Patient AS Patient_ID,
+      CONCAT(Patient.Surname_patient, ' ', Patient.Name_patient, IFNULL(CONCAT(' ', Patient.Middle_patient), '')) AS Patient_Info,
+      TimeSlots.ID_TimeSlot,
+      TimeSlots.TimeValue
+    FROM 
+      AppointmentSchedule
+    INNER JOIN 
+      Doctor ON AppointmentSchedule.Doctor_ID = Doctor.ID_Doctor
+    INNER JOIN 
+      Patient ON AppointmentSchedule.Patient_ID = Patient.ID_Patient
+    INNER JOIN 
+      TimeSlots ON AppointmentSchedule.TimeSlot_ID = TimeSlots.ID_TimeSlot;
+  `;
+
+  pool.query(sql, (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.json(results);
+  });
+});
+app.get('/userlog/:id', (req, res) => {
   const userId = req.params.id; 
 
-  const sql = 'SELECT Surname FROM Users WHERE ID_User = ?';
+  const sql = 'SELECT CONCAT(Name, " ", Surname, " ", MiddleName) FROM Users WHERE ID_User = ?';
   pool.query(sql, userId, (err, results) => {
     if (err) {
       console.error('Ошибка при запросе пользователя из базы данных:', err);
@@ -575,7 +715,25 @@ app.get('/user/:id', (req, res) => {
       return res.status(404).json({ message: 'Пользователь не найден' });
     }
 
-    const userName = results[0].Surname; 
+    const userName = results[0].FullName; 
+    res.json({ name: userName }); 
+  });
+});
+app.get('/user/:id', (req, res) => {
+  const userId = req.params.id; 
+
+  const sql = 'SELECT CONCAT(Name, " ", Surname, " ", MiddleName) AS FullName FROM Users WHERE ID_User = ?';
+  pool.query(sql, userId, (err, results) => {
+    if (err) {
+      console.error('Ошибка при запросе пользователя из базы данных:', err);
+      return res.status(500).json({ error: 'Ошибка при запросе пользователя' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Пользователь не найден' });
+    }
+
+    const userName = results[0].FullName; 
     res.json({ name: userName }); 
   });
 });
@@ -600,7 +758,7 @@ function authorizeAdmin(req, res, next) {
       return res.status(403).send('Недействительный токен');
     }
 
-    const userId = decoded.id; // Получаем ID пользователя из декодированного токена
+    const userId = decoded.id; //  ID пользователя из декодированного токена
 
     const sql = `
       SELECT P.Post_Name AS Role
@@ -635,7 +793,40 @@ function authorizeAdmin(req, res, next) {
 app.get('/AdminPanel', authorizeAdmin, (req, res) => {
   res.sendFile('/public/AdminPanel.html');
 });
+// ПРОЦЕДУРЫ
+app.get('/PaymentsForToday', (req, res) => {
+  const sql = 'CALL GetPaymentsForToday();'; 
+  pool.query(sql, (error, results) => {
+    if (error) {
+      res.status(500).json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+app.get('/LastPaymentInfo', (req, res) => {
+  const sql = 'CALL GetLastPaymentInfo();'; 
+  pool.query(sql, (error, results) => {
+    if (error) {
+      res.status(500).json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+// GET запрос для получения изменений ролей из таблицы RoleChangeLog
+app.get('/roleChangeLog', (req, res) => {
+  const query = 'SELECT user_id, description, timestamp FROM RoleChangeLog';
 
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Ошибка получения данных из RoleChangeLog' });
+      throw error;
+    }
+
+    res.status(200).json(results); 
+  });
+});
 
 app.listen(port, () => {
   console.log('Сервер запущен на порту 3001');

@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {  
     const form = document.querySelector('form');
-  
+    const phoneNumbers = []; // Хранение номеров телефонов
+    function isPhoneNumberUnique(phoneNumber) {
+      return !phoneNumbers.includes(phoneNumber);
+    }
+    
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
   
@@ -26,7 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
             address,
           }),
         });
-  
+        const phoneNumber = patient.Phone_number; // Предположим, номер телефона хранится в поле 'Phone_number'
+
+        //  уникальность номера телефона перед добавлением в карточку
+        if (isPhoneNumberUnique(phoneNumber)) {
+          phoneNumbers.push(phoneNumber); // Добавляем номер
+          allCards.push(card); // Добавляем карточку в общий список
+        }
         if (!response.ok) {
           const errorMessage = await response.text();
           if (response.status === 400) {

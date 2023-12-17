@@ -35,7 +35,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   fetchDiagnoses(); // Запускаем получение данных о диагнозах
 
-  // Обработчик события для ввода поиска по диагнозу
   let searchTimeout;
 
   searchDiagnosisInput.addEventListener('input', async () => {

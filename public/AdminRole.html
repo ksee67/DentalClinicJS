@@ -26,23 +26,46 @@
 	<main class="main">
         <div class="container">
           <div class="left-section" style="margin-left: 0px; margin-top: 0px;">
-            <h1 style="color: #3167D9;margin-right: 220px;">Управление ролями пользователей
+            <h1 style="color: #3167D9;margin-left: 220px;">Управление ролями пользователей
             </h1>
-			<div class="input-section" style="margin-left: 30px;">
+			<div class="input-section" style="margin-left: 220px;">
 				<label for="role" style="font-size: 26px; margin-left: 10px;">Роль:</label>
 				<select id="role" name="role" style="font-size: 26px; margin-bottom: 50px; margin-top: 20px;">
 				</select>
 			</div>
-			<div class="input-section" style="margin-left: 30px;">
+			<div class="input-section" style="margin-left: 220px;">
 			  <label for="user" style="font-size: 26px; margin-left: 10px;">Пользователь:</label>
 			  <select style="font-size: 26px; margin-left: 10px;" id="user">
 				<option value="" disabled selected hidden>Выберите пользователя</option>
 			  </select>
-			  <input type="text" id="searchUser" style="margin-left: 40px; width: 300px;" placeholder="Поиск по ФИО пациента">
+			  <input type="text" id="searchUser" style="margin-left: 40px; width: 300px;" placeholder="Поиск по ФИО пользователя">
 			</div>
-			  <button id="updateButton" class="login-button" style="margin-left: 0px;">Изменить роль</button>   
+			  <button id="updateButton" class="login-button" style="margin-left: 220px;">Изменить роль</button>   
 		</div>
+	
+		  
 	</div>
+	<h1 style="color: #3167D9;margin-left: 220px;">Просмотр последних изменений
+	</h1>
+<div  style="margin-left: 350px;margin-top: 20px;">
+
+	<div style="overflow-x: auto;max-width: 500%;max-height: 400px;">
+		<table style="margin-left: 0px; margin-right: 20px;" id="roleChangeLogTable" border="1">
+		  <thead>
+			<tr>
+			  <th>Пользователю, кому внесли изменения</th>
+			  <th>Что сделали?</th>
+			  <th>Время</th>
+			</tr>
+		  </thead>
+		  <tbody id="roleChangeLogBody">
+			<!-- Тут ваши данные -->
+		  </tbody>
+		</table>
+	  </div>
+	  
+	</div>
+
 </div>
 <p style="color: #f3f5f9;">-</p>
 <p style="color: #f3f5f9;">-</p>
@@ -92,5 +115,7 @@
 			</div>
 		</footer>
 		<script src="../src/scripts/adminRoles.js"></script>
-</body>
+		<script src="../src/scripts/adminLog.js"></script>
+
+	</body>
 </html>
