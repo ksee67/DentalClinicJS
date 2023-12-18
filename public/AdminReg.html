@@ -26,7 +26,7 @@
 	<main class="main">
         <div class="container">
           <div class="left-section" style="margin-left: 0px; margin-top: 0px;">
-            <h1 style="color: #3167D9;margin-right: 420px;">Регистрация сотрудников в системе
+            <h1 style="color: #3167D9;margin-right: 220px;margin-left: 10px;">Регистрация сотрудников в системе
             </h1>
             <form id="userForm" onsubmit="submitForm(event)">
               <div class="input-section" style="margin-left: 30px;margin-top: 20px;">
@@ -67,10 +67,36 @@
               <button class="login-button" style="margin-left: 0px;" type="submit">Создать пользователя</button>
             </form>
     </div>
+  </div>
+</div>
+</div>
 
-	</div>
+<div style="margin-top: 20px;">
+  <h1 style="color: #3167D9;margin-right: 420px;">Сотрудники в системе
+  </h1>
+  <label for="userName">Поиск по ФИО пользователя:</label>
+<input type="text" id="userName" placeholder="Введите ФИО пользователя">
+
+  <div class="table-container" style="margin-left: 50px; width: 1000px; height: 500px; overflow-x: auto;">
+    <table id="userPostsTable">
+      <thead>
+        <tr>
+          <th>Фамилия</th>
+          <th>Имя</th>
+          <th>Отчетство</th>
+          <th>Электронная почта</th>
+          <th>Логин</th>
+          <th>Пароль<br>пользователя</th>
+          <th>Должность</th>
+        </tr>
+      </thead>
+      <tbody style="overflow-x: auto;  width: 100px; height: 100px;" id="userPostsTableBody">
+      </tbody>
+    </table>
+  </div>
 </div>
 </div>
+
 <p style="color: #f3f5f9;">-</p>
 <p style="color: #f3f5f9;">-</p>
 <p style="color: #f3f5f9;">-</p>

@@ -107,7 +107,6 @@ window.addEventListener('DOMContentLoaded', async () => {
             }
           })
           .then(data => {
-            // Добавьте обработку данных в зависимости от типа ответа
             if (typeof data === 'object') {
               const returnBack = confirm('Запись успешно изменена. Желаете вернуться назад?');
               if (returnBack) {

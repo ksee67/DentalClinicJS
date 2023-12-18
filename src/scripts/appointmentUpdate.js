@@ -192,6 +192,43 @@ document.getElementById('editSubmit').addEventListener('click', async () => {
       TimeSlot_ID: timeSlotID
     };
 
+    const currentDate = new Date();
+    const selectedDateTime = new Date(date);
+
+    if (selectedDateTime < currentDate) {
+      alert('Нельзя перенести прием на прошедшее время.');
+      return;
+    }
+
+    const confirmation = confirm('Уверены ли вы, что хотите обновить запись на прием?');
+
+    if (!confirmation) {
+      return;
+    }
+
+    const checkResponse = await fetch(`http://localhost:3001/appointments/check`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        Doctor_ID: doctorId,
+        Date_of_Appointment: date,
+        TimeSlot_ID: timeSlotID
+      })
+    });
+
+    if (!checkResponse.ok) {
+      throw new Error('Ошибка проверки');
+    }
+
+    const isAppointmentAvailable = await checkResponse.json();
+
+    if (!isAppointmentAvailable) {
+      alert('Данное время занято у выбранного врача. Пожалуйста, выберите другое время.');
+      return;
+    }
+
     const updateResponse = await fetch(`http://localhost:3001/appointments/${id}`, {
       method: 'PUT',
       headers: {
@@ -212,6 +249,7 @@ document.getElementById('editSubmit').addEventListener('click', async () => {
     alert('Произошла ошибка при обновлении записи');
   }
 });
+
 document.getElementById('deleteSubmit').addEventListener('click', async () => {
   try {
     const deleteResponse = await fetch(`http://localhost:3001/appointments/${id}`, {

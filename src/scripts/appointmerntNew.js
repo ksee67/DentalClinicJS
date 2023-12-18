@@ -216,17 +216,33 @@ function checkForSunday() {
         const selectedTimeSlotId = document.getElementById('time').value;
         const selectedDate = document.getElementById('selectedDate').value;
     
+        const currentDate = new Date();
+        const selectedDateTime = new Date(selectedDate);
+    
+        if (selectedDateTime < currentDate) {
+          alert('Нельзя записаться на прием в прошедшее время.');
+          return;
+        }
+    
+        const confirmation = confirm('Уверены ли вы, что хотите добавить запись на прием?');
+    
+        if (!confirmation) {
+          return;
+        }
+    
         const responseAppointments = await fetchAppointments();
-        const existingAppointment = responseAppointments.find(appointment =>
-          appointment.Doctor_ID === selectedDoctorId &&
-          appointment.Date_of_Appointment === selectedDate &&
-          appointment.TimeSlot_ID === selectedTimeSlotId
+        const existingAppointment = responseAppointments.find(
+          appointment =>
+            appointment.Doctor_ID === selectedDoctorId &&
+            appointment.Date_of_Appointment === selectedDate &&
+            appointment.TimeSlot_ID === selectedTimeSlotId
         );
     
         if (existingAppointment) {
           alert('Данная дата и время заняты у выбранного врача. Пожалуйста, выберите другую дату или время.');
         } else {
           // Код для добавления новой записи на прием
+    
           const response = await fetch('http://localhost:3001/appointments', {
             method: 'POST',
             headers: {
@@ -242,7 +258,7 @@ function checkForSunday() {
     
           if (response.ok) {
             alert('Запись успешно добавлена');
-            window.location.reload(); // Reload the page after adding an 
+            window.location.reload(); // Обновляем
           } else {
             throw new Error('Ошибка при добавлении записи');
           }

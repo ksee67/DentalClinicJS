@@ -56,8 +56,6 @@ app.get('/downloadBackup', (req, res) => {
   });
 });
 
-  
-
 app.post('/import-payment', upload.single('file'), (req, res) => {
   const file = req.file;
 
@@ -281,6 +279,36 @@ app.get('/diagnosis', (req, res) => {
       return;
     }
     res.json(results); // Отправляем данные о диагнозах в формате JSON на клиент
+  });
+});
+app.get('/userPosts/', (req, res) => {
+  try {
+  const sql = `
+  SELECT Users.*, Post.post_name
+  FROM Users
+  INNER JOIN Post ON Users.Post_ID = Post.ID_Post;  
+  `;
+  pool.query(sql, (error, results) => {
+    if (error) {
+      console.error('Ошибка запроса: ' + error.message);
+      res.status(500).send('Ошибка сервера');
+      return;
+    }
+    res.status(200).json(results); // Отправляем данные о медицинской истории в формате JSON
+  });
+} catch (error) {
+  console.error('Ошибка при получении медицинской истории:', error);
+  res.status(500).send('Ошибка сервера');
+}
+});
+app.delete('/userPosts/:userId', (req, res) => {
+  const userId = req.params.userId;
+  pool.query('DELETE FROM Users WHERE ID_User = ?', userId, (error, results, fields) => {
+    if (error) {
+      res.status(500).json({ error: 'Failed to delete user' });
+    } else {
+      res.status(200).json({ message: 'User deleted successfully' });
+    }
   });
 });
 
@@ -739,8 +767,6 @@ app.get('/user/:id', (req, res) => {
 });
 
 app.delete('/logout', (req, res) => {
-  // Implement logout functionality here
-  // You can clear user sessions, tokens, or perform other necessary actions
   res.sendStatus(204); // Send a success status for the logout
 });
 

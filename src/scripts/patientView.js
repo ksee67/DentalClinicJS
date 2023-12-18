@@ -1,69 +1,102 @@
 window.addEventListener('DOMContentLoaded', async () => {
+  const notDataLabel = document.createElement('label');
+  notDataLabel.textContent = 'Данные не найдены.';
+  notDataLabel.style.color = 'black';
+  notDataLabel.style.fontSize = '20px';
+  notDataLabel.style.display = 'none';
+  notDataLabel.id = 'notData';
+
   const patientInput = document.querySelector('input[placeholder="Поиск по ФИО пациента"]');
   if (patientInput) {
     patientInput.addEventListener('input', filterByPatientName);
   } else {
     console.error('Элемент не найден');
   }
+  
   const cardsContainer = document.querySelector('.cards-container');
   const sortAscButton = document.getElementById('sortAscButton');
   const sortDescButton = document.getElementById('sortDescButton');
   const allCards = [];
   let visibleCards = [];
-  filterByAgeCategory();
 
+  function getAge(dateOfBirth) {
+    const today = new Date();
+    const diff = today - dateOfBirth;
+    const ageDate = new Date(diff);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  }
 
-function getAge(dateOfBirth) {
-  const today = new Date();
-  const diff = today - dateOfBirth;
-  const ageDate = new Date(diff);
-  return Math.abs(ageDate.getUTCFullYear() - 1970);
-}
-function filterByPatientName() {
-  const searchText = patientInput.value.toLowerCase().trim();
+  function filterByPatientName() {
+    const searchText = patientInput.value.toLowerCase().trim();
+  
+    let anyCardShown = false;
+  
+    allCards.forEach(card => {
+      const fullName = card.querySelector('.patient-info h2').textContent.toLowerCase();
+      const names = fullName.split(' ');
+      const shouldShowCard = names.some(name => name.includes(searchText));
+  
+      card.style.display = shouldShowCard ? 'block' : 'none';
+  
+      if (shouldShowCard) {
+        anyCardShown = true;
+      }
+    });
+  
+    visibleCards = allCards.filter(card => card.style.display !== 'none');
+    showPage(1);
+  
+    toggleNoDataLabel(!anyCardShown);
+  }
+  
+  // Отображение/скрытие метки в зависимости от наличия карточек
+  function toggleNoDataLabel(cardsFound) {
+    notDataLabel.style.display = cardsFound ? 'none' : 'block';
+  }
+  
 
-  allCards.forEach(card => {
-    const fullName = card.querySelector('.patient-info h2').textContent.toLowerCase();
-    const names = fullName.split(' ');
-    const shouldShowCard = names.some(name => name.includes(searchText));
+  function sortPatientsAsc() {
+    visibleCards.sort((a, b) =>
+      a.querySelector('.patient-info h2').textContent.localeCompare(b.querySelector('.patient-info h2').textContent)
+    );
+    showPage(1); // Показать отсортированные карточки на первой странице
+  }
 
-    card.style.display = shouldShowCard ? 'block' : 'none';
-  });
-
-  // Обновляем видимые карточки и отображаем первую страницу
-  visibleCards = allCards.filter(card => card.style.display !== 'none');
-  showPage(1);
-}
-function sortPatientsAsc() {
-  visibleCards.sort((a, b) =>
-    a.querySelector('.patient-info h2').textContent.localeCompare(b.querySelector('.patient-info h2').textContent)
-  );
-  showPage(1); // Показать отсортированные карточки на первой странице
-}
-
-function sortPatientsDesc() {
-  visibleCards.sort((a, b) =>
-    b.querySelector('.patient-info h2').textContent.localeCompare(a.querySelector('.patient-info h2').textContent)
-  );
-  showPage(1); //  отсортированные карточки на первой странице
-}
+  function sortPatientsDesc() {
+    visibleCards.sort((a, b) =>
+      b.querySelector('.patient-info h2').textContent.localeCompare(a.querySelector('.patient-info h2').textContent)
+    );
+    showPage(1); //  отсортированные карточки на первой странице
+  }
 
   function renderCards() {
     cardsContainer.innerHTML = '';
     visibleCards.forEach(card => {
       cardsContainer.appendChild(card);
     });
+    toggleNoDataLabel();
   }
 
+  function toggleNoDataLabel() {
+    notDataLabel.style.display = visibleCards.length === 0 ? 'block' : 'none';
+  }
+
+  // Скрываем метку "Данные не найдены" при загрузке
+  toggleNoDataLabel();
+
+
   patientInput.addEventListener('input', filterByPatientName);
+
   function handleDetailsClick(patientId, fullName) {
     window.location.href = `MedicalHistory.html?id=${patientId}&fullName=${fullName}`;
   }
+
   try {
     const response = await fetch('http://localhost:3001/patientsAll');
     if (!response.ok) {
       throw new Error('Ошибка при получении данных о пациентах');
     }
+
     const patients = await response.json();
     patients.forEach(patient => {
       const card = document.createElement('div');
@@ -102,6 +135,11 @@ function sortPatientsDesc() {
     visibleCards = [...allCards];
     renderCards();
     addPagination(1);
+
+    if (visibleCards.length === 0) {
+      cardsContainer.appendChild(notDataLabel);
+      notDataLabel.style.display = 'block';
+    }
   
     sortAscButton.addEventListener('click', sortPatientsAsc);
     sortDescButton.addEventListener('click', sortPatientsDesc);
@@ -109,6 +147,7 @@ function sortPatientsDesc() {
     showPage(1); //  для отображения всех карточек после загрузки
   } catch (error) {
     console.error('Ошибка при получении данных о пациентах:', error);
+    notDataLabel.style.display = 'block';
   }
 
   function formatDate(date) {
@@ -152,6 +191,7 @@ function sortPatientsDesc() {
       pagination.appendChild(pageButton);
     }
   }
+
   document.getElementById('rating').addEventListener('change', filterByAgeCategory);
 
   async function filterByAgeCategory() {
@@ -188,6 +228,7 @@ function sortPatientsDesc() {
   }
   
 });
+
 const recognition = new window.webkitSpeechRecognition(); //  экземпляр распознавания речи
 
 const input = document.querySelector('input'); //  инпут, в который будет вводиться текст с помощью голоса
